@@ -21,10 +21,8 @@
 
   <style>
     :root {
-      --bg-main: #000000;
       --text: #f4f4f4;
       --soft-text: rgba(255, 255, 255, 0.86);
-      --muted-text: rgba(255, 255, 255, 0.14);
       --line: rgba(255, 255, 255, 0.55);
       --link: rgba(255, 255, 255, 0.34);
     }
@@ -62,7 +60,6 @@
       52% { filter: brightness(1) contrast(1); }
     }
 
-    /* Фоновые размытые пятна */
     .bg-blur-wrap {
       position: fixed;
       inset: 0;
@@ -121,7 +118,6 @@
       to   { transform: translate3d(20px, -36px, 0) scale(1.08); opacity: 0.07; }
     }
 
-    /* Призрачные надписи */
     .ghost-layer {
       position: fixed;
       inset: 0;
@@ -176,14 +172,12 @@
       to   { transform: translate3d(12px, -15px, 0); opacity: 0.036; }
     }
 
-    /* Частицы */
     #particles-js {
       position: fixed;
       inset: 0;
       z-index: 1;
     }
 
-    /* Noise */
     .noise {
       position: fixed;
       inset: -20%;
@@ -207,7 +201,6 @@
       100% { transform: translate(0, 0); }
     }
 
-    /* Scanlines */
     .scanlines {
       position: fixed;
       inset: 0;
@@ -224,7 +217,6 @@
       mix-blend-mode: soft-light;
     }
 
-    /* Виньетка */
     .vignette {
       position: fixed;
       inset: 0;
@@ -238,7 +230,6 @@
       );
     }
 
-    /* Короткая glitch-вспышка */
     .glitch-flash {
       position: fixed;
       inset: 0;
@@ -269,7 +260,6 @@
       100% { opacity: 0; transform: translateX(0); }
     }
 
-    /* Курсор */
     #cursor {
       position: fixed;
       width: 20px;
@@ -291,7 +281,6 @@
       backdrop-filter: blur(1px);
     }
 
-    /* Контент */
     .content {
       position: relative;
       z-index: 7;
@@ -313,14 +302,74 @@
       will-change: transform;
     }
 
-    h1 {
+    .phantom-title {
+      position: relative;
+      display: inline-block;
       margin: 0;
       font-size: clamp(2.2rem, 4vw, 3rem);
       font-weight: 700;
       letter-spacing: 0.04em;
+      color: #f4f4f4;
       text-shadow:
-        0 0 20px rgba(255,255,255,0.06),
-        0 0 40px rgba(255,255,255,0.02);
+        0 0 14px rgba(255, 255, 255, 0.06),
+        0 0 28px rgba(255, 255, 255, 0.025);
+      animation: titleGlowBreath 7s ease-in-out infinite;
+      will-change: transform, text-shadow, opacity;
+    }
+
+    .phantom-title::before,
+    .phantom-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition:
+        opacity 0.14s ease,
+        transform 0.14s ease,
+        filter 0.14s ease;
+    }
+
+    .phantom-title::before {
+      color: rgba(185, 210, 255, 0.16);
+      transform: translate(0, 0);
+      filter: blur(0.4px);
+      text-shadow: 0 0 12px rgba(185, 210, 255, 0.05);
+    }
+
+    .phantom-title::after {
+      color: rgba(255, 205, 205, 0.10);
+      transform: translate(0, 0);
+      filter: blur(0.6px);
+      text-shadow: 0 0 10px rgba(255, 205, 205, 0.04);
+    }
+
+    .phantom-title.phantom-active::before {
+      opacity: 1;
+      transform: translate(-2px, 0);
+    }
+
+    .phantom-title.phantom-active::after {
+      opacity: 1;
+      transform: translate(2px, 0);
+    }
+
+    @keyframes titleGlowBreath {
+      0%, 100% {
+        text-shadow:
+          0 0 14px rgba(255, 255, 255, 0.06),
+          0 0 28px rgba(255, 255, 255, 0.025);
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        text-shadow:
+          0 0 18px rgba(255, 255, 255, 0.085),
+          0 0 36px rgba(255, 255, 255, 0.035);
+        transform: scale(1.008);
+        opacity: 0.985;
+      }
     }
 
     .desc {
@@ -352,7 +401,6 @@
       transition: opacity 0.8s ease;
     }
 
-    /* Footer */
     .footer-links {
       position: fixed;
       left: 50%;
@@ -423,7 +471,7 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
   <div class="bg-blur-wrap">
     <div class="bg-blur blur-1"></div>
     <div class="bg-blur blur-2"></div>
@@ -445,7 +493,7 @@
 
   <div class="content">
     <div id="float-box" class="text-box">
-      <h1>Z.R</h1>
+      <h1 class="phantom-title" data-text="Z.R">Z.R</h1>
       <p class="desc">
         lost in gmod & dota. 7.5k hours of
         <span class="handwritten">escapism</span>.
@@ -470,6 +518,24 @@
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    // Блокировки
+    document.addEventListener('keydown', function (e) {
+      const key = e.key ? e.key.toLowerCase() : '';
+
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && key === 'u') ||
+        (e.ctrlKey && key === 's') ||
+        (e.ctrlKey && key === 'a') ||
+        (e.ctrlKey && key === 'i') ||
+        (e.ctrlKey && e.shiftKey && key === 'i') ||
+        (e.ctrlKey && e.shiftKey && key === 'j') ||
+        (e.ctrlKey && e.shiftKey && key === 'c')
+      ) {
+        e.preventDefault();
+      }
+    });
 
     // Кастомный курсор
     const cursor = document.getElementById('cursor');
@@ -598,7 +664,7 @@
       });
     }
 
-    // Редкие глитч-вспышки
+    // Редкие глитч-вспышки фона
     const glitchFlash = document.getElementById('glitchFlash');
 
     function scheduleGlitch() {
@@ -614,7 +680,7 @@
 
     scheduleGlitch();
 
-    // Спокойный title с редкими аномалиями
+    // Title
     const defaultTitle = '^_^';
     const rareTitles = ['019', 'dream residue', 'fine', 'sun'];
 
@@ -635,6 +701,24 @@
     }
 
     scheduleTitleShift();
+
+    // Редкая фантомная аномалия у Z.R
+    const phantomTitle = document.querySelector('.phantom-title');
+
+    function triggerPhantomTitle() {
+      if (!phantomTitle) return;
+
+      phantomTitle.classList.add('phantom-active');
+
+      setTimeout(() => {
+        phantomTitle.classList.remove('phantom-active');
+      }, 160);
+
+      const nextDelay = 9000 + Math.random() * 14000;
+      setTimeout(triggerPhantomTitle, nextDelay);
+    }
+
+    triggerPhantomTitle();
   </script>
 </body>
 </html>
