@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>^_^</title>
+    <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/736x/ec/38/b9/ec38b9120807104f2be132045610b6c6.jpg">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            overflow: hidden;
+            user-select: none;
+            cursor: none; 
+        }
+
+        #cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+            font-family: 'Bahnschrift', 'Inter', sans-serif;
+            text-align: center;
+        }
+
+        .text-box {
+            max-width: 600px;
+            padding: 20px;
+            position: relative; 
+            transition: left 0.4s ease-out, top 0.4s ease-out;
+            will-change: left, top;
+        }
+        
+        h1 { margin: 0; font-size: 2.5em; }
+
+        #quote {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.12;
+            font-style: italic;
+        }
+
+        .footer-links {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            gap: 25px;
+        }
+        .footer-links a {
+            color: #ffffff;
+            font-size: 22px;
+            opacity: 0.4;
+            transition: all 0.4s ease;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            opacity: 1;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            transform: translateY(-3px);
+        }
+
+        .handwritten {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.2em;
+            color: #ffffff;
+            display: inline-block;
+            transform: rotate(-3deg);
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> 
+    <div id="cursor"></div>
+    <div id="particles-js"></div>
+
+    <div class="content">
+        <div id="float-box" class="text-box" style="left: 0px; top: 0px;">
+            <h1>ay.ru</h1>
+            <p>lost in gmod & dota. 7.5k hours of <span class="handwritten">escapism</span>. i’m <span class="handwritten">fine</span>, really.</p>
+            <div id="quote"></div>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="https://www.youtube.com/@eblanograd" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://steamcommunity.com/id/ay_ru/" target="_blank"><i class="fab fa-steam"></i></a>
+        <a href="https://github.com/ayzov" target="_blank"><i class="fab fa-github"></i></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.background = 'rgba(255, 255, 255, 0.1)';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.background = 'transparent';
+            });
+        });
+
+        const quotes = [
+            "だめだね",
+            "仕方がない",
+            "つらい",
+            "どうでもいいや",
+            "憂鬱",
+            "闇が無ければ、星は輝くことができない"
+        ];
+        document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": false },
+                "move": { "enable": true, "speed": 1, "random": true, "out_mode": "out" }
+            },
+            "interactivity": { 
+                "events": { 
+                    "onhover": { "enable": false }, 
+                    "onclick": { "enable": false }
+                } 
+            },
+            "retina_detect": true
+        });
+
+        const box = document.getElementById('float-box');
+        document.addEventListener('mousemove', (e) => {
+            let x = (e.pageX - window.innerWidth / 2) / 70;
+            let y = (e.pageY - window.innerHeight / 2) / 70;
+            box.style.left = x + 'px';
+            box.style.top = y + 'px';
+        });
+
+        const tabTitles = ["(=^･ω･^=)", "(>_<)", "(◕‿◕)♡", "UwU", "(=;ω;=)"];
+        let i = 0;
+        setInterval(() => {
+            document.title = tabTitles[i];
+            i = (i + 1) % tabTitles.length;
+        }, 600);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
