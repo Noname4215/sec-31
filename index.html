@@ -677,21 +677,14 @@
     scheduleGlitch();
 
     // Title
-    const defaultTitle = 'ЗДЕСЬ ОДНАКО Я!';
-    const rareTitles = ['019', 'dream residue', 'fine', 'sun'];
+    const defaultTitle = 'КТО ТУТ?';
+const tabTitles = ['Яйца', 'dream residue', 'fine', 'sun', '0.1.9'];
+let titleIndex = 0;
 
-    document.title = defaultTitle;
-
-    function scheduleTitleShift() {
-      const delay = 12000 + Math.random() * 8000;
-
-      setTimeout(() => {
-        const randomTitle = rareTitles[Math.floor(Math.random() * rareTitles.length)];
-        document.title = randomTitle;
-
-        setTimeout(() => {
-          document.title = defaultTitle;
-          scheduleTitleShift();
+setInterval(() => {
+  document.title = tabTitles[titleIndex];
+  titleIndex = (titleIndex + 1) % tabTitles.length;
+}, 1200);
         }, 700);
       }, delay);
     }
