@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>^_^</title>
-    <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/736x/49/8c/22/498c22cf5a641c3205af5f3c83cac406.jpg">
-
+    <!-- Твоя новая иконка -->
+    <link rel="icon" type="image/x-icon" href="https://pinimg.com">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link href="https://googleapis.com" rel="stylesheet">
     
     <style>
         body, html {
@@ -15,10 +15,40 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000;
+            background-color: #050505; /* Чуть темнее для глубины */
             overflow: hidden;
             user-select: none;
             cursor: none; 
+        }
+
+        /* ЭФФЕКТ ШУМА И ПОЛОС */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://wikimedia.org');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.02) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            background-size: 100% 3px;
+            z-index: 11;
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
         }
 
         #cursor {
@@ -60,12 +90,30 @@
             will-change: left, top;
         }
         
-        h1 { margin: 0; font-size: 2.5em; }
+        /* ГЛИТЧ НА ЗАГОЛОВОК */
+        h1 { 
+            margin: 0; 
+            font-size: 2.8em; 
+            transition: all 0.2s ease;
+        }
+        h1:hover {
+            animation: glitch 0.3s linear infinite;
+            text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(-3px, -2px); }
+            60% { transform: translate(3px, 2px); }
+            80% { transform: translate(3px, -2px); }
+            100% { transform: translate(0); }
+        }
 
         #quote {
             margin-top: 15px;
             font-size: 0.9em;
-            opacity: 0.12;
+            opacity: 0.15; /* Чуть виднее твои фразы */
             font-style: italic;
         }
 
@@ -74,7 +122,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 3;
+            z-index: 20;
             display: flex;
             gap: 25px;
         }
@@ -102,6 +150,8 @@
     </style>
 </head>
 <body oncontextmenu="return false;"> 
+    <div class="noise-overlay"></div>
+    <div class="scanlines"></div>
     <div id="cursor"></div>
     <div id="particles-js"></div>
 
@@ -114,12 +164,12 @@
     </div>
 
     <div class="footer-links">
-        <a href="https://www.youtube.com/@eblanograd" target="_blank"><i class="fab fa-youtube"></i></a>
-        <a href="https://steamcommunity.com/id/ay_ru/" target="_blank"><i class="fab fa-steam"></i></a>
-        <a href="https://github.com/ayzov" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://steamcommunity.com" target="_blank"><i class="fab fa-steam"></i></a>
+        <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://jsdelivr.net"></script>
     <script>
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
@@ -140,6 +190,7 @@
             });
         });
 
+        /* Твои новые цитаты сохранены */
         const quotes = [
             "Random people in a big city",
             "Яйца",
@@ -152,19 +203,16 @@
 
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80 },
+                "number": { "value": 70 },
                 "color": { "value": "#ffffff" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 2, "random": true },
                 "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 1, "random": true, "out_mode": "out" }
+                "move": { "enable": true, "speed": 0.6, "random": true, "out_mode": "out" }
             },
             "interactivity": { 
-                "events": { 
-                    "onhover": { "enable": false }, 
-                    "onclick": { "enable": false }
-                } 
+                "events": { "onhover": { "enable": false }, "onclick": { "enable": false } } 
             },
             "retina_detect": true
         });
@@ -177,12 +225,13 @@
             box.style.top = y + 'px';
         });
 
+        /* Твои заголовки вкладок сохранены */
         const tabTitles = ["019", "S3CRET?", "Yaitsa", "Dream", "Sun"];
         let i = 0;
         setInterval(() => {
             document.title = tabTitles[i];
             i = (i + 1) % tabTitles.length;
-        }, 600);
+        }, 700);
 
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
