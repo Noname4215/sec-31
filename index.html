@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>^_^</title>
-    <!-- Твоя новая иконка -->
     <link rel="icon" type="image/x-icon" href="https://pinimg.com">
     
     <link rel="stylesheet" href="https://cloudflare.com">
@@ -15,52 +14,20 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #050505; /* Чуть темнее для глубины */
+            background-color: #000000;
             overflow: hidden;
             user-select: none;
             cursor: none; 
         }
 
-        /* ЭФФЕКТ ШУМА И ПОЛОС */
-        .noise-overlay {
+        /* ПОМЕХИ СТРОГО НА ФОНЕ */
+        .noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://wikimedia.org');
-            opacity: 0.05;
+            opacity: 0.03;
             pointer-events: none;
-            z-index: 10;
-        }
-
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.02) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            background-size: 100% 3px;
-            z-index: 11;
-            pointer-events: none;
-            animation: scan 8s linear infinite;
-        }
-
-        @keyframes scan {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-
-        #cursor {
-            width: 20px;
-            height: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
-            transform: translate(-50%, -50%);
+            z-index: 0; /* Самый нижний слой */
         }
 
         #particles-js {
@@ -90,30 +57,39 @@
             will-change: left, top;
         }
         
-        /* ГЛИТЧ НА ЗАГОЛОВОК */
+        /* ГЛИТЧ ЭФФЕКТ ДЛЯ Z.R */
         h1 { 
             margin: 0; 
-            font-size: 2.8em; 
-            transition: all 0.2s ease;
+            font-size: 2.5em; 
         }
         h1:hover {
-            animation: glitch 0.3s linear infinite;
             text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+            animation: glitch-anim 0.2s infinite;
         }
 
-        @keyframes glitch {
+        @keyframes glitch-anim {
             0% { transform: translate(0); }
-            20% { transform: translate(-3px, 2px); }
-            40% { transform: translate(-3px, -2px); }
-            60% { transform: translate(3px, 2px); }
-            80% { transform: translate(3px, -2px); }
+            20% { transform: translate(-2px, 1px); }
+            40% { transform: translate(2px, -1px); }
             100% { transform: translate(0); }
+        }
+
+        #cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
+            transform: translate(-50%, -50%);
         }
 
         #quote {
             margin-top: 15px;
             font-size: 0.9em;
-            opacity: 0.15; /* Чуть виднее твои фразы */
+            opacity: 0.12;
             font-style: italic;
         }
 
@@ -122,7 +98,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 20;
+            z-index: 3;
             display: flex;
             gap: 25px;
         }
@@ -135,14 +111,12 @@
         }
         .footer-links a:hover {
             opacity: 1;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             transform: translateY(-3px);
         }
 
         .handwritten {
             font-family: 'Shadows Into Light', cursive;
             font-size: 1.2em;
-            color: #ffffff;
             display: inline-block;
             transform: rotate(-3deg);
             margin-left: 4px;
@@ -150,8 +124,7 @@
     </style>
 </head>
 <body oncontextmenu="return false;"> 
-    <div class="noise-overlay"></div>
-    <div class="scanlines"></div>
+    <div class="noise"></div>
     <div id="cursor"></div>
     <div id="particles-js"></div>
 
@@ -177,20 +150,6 @@
             cursor.style.top = e.clientY + 'px';
         });
 
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.style.width = '40px';
-                cursor.style.height = '40px';
-                cursor.style.background = 'rgba(255, 255, 255, 0.1)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
-                cursor.style.background = 'transparent';
-            });
-        });
-
-        /* Твои новые цитаты сохранены */
         const quotes = [
             "Random people in a big city",
             "Яйца",
@@ -203,17 +162,15 @@
 
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 70 },
+                "number": { "value": 80 },
                 "color": { "value": "#ffffff" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.4, "random": true },
-                "size": { "value": 2, "random": true },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
                 "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 0.6, "random": true, "out_mode": "out" }
+                "move": { "enable": true, "speed": 1, "random": true, "out_mode": "out" }
             },
-            "interactivity": { 
-                "events": { "onhover": { "enable": false }, "onclick": { "enable": false } } 
-            },
+            "interactivity": { "events": { "onhover": { "enable": false }, "onclick": { "enable": false } } },
             "retina_detect": true
         });
 
@@ -225,13 +182,12 @@
             box.style.top = y + 'px';
         });
 
-        /* Твои заголовки вкладок сохранены */
         const tabTitles = ["019", "S3CRET?", "Yaitsa", "Dream", "Sun"];
         let i = 0;
         setInterval(() => {
             document.title = tabTitles[i];
             i = (i + 1) % tabTitles.length;
-        }, 700);
+        }, 600);
 
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
