@@ -1,9 +1,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>^_^</title>
+    <title>Я ТУТ!</title>
     <link rel="icon" type="image/x-icon" href="https://pinimg.com">
-    
     <link rel="stylesheet" href="https://cloudflare.com">
     <link href="https://googleapis.com" rel="stylesheet">
     
@@ -14,14 +13,15 @@
             user-select: none; cursor: none; 
         }
 
-        /* РЕАЛЬНЫЕ ПОМЕХИ (ШУМ) */
-        .noise-layer {
+        /* ПОМЕХИ: Добавляем их прямо ВНУТРЬ body через псевдоэлемент, чтобы не создавать лишних тегов */
+        body::before {
+            content: "";
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://wikimedia.org');
-            opacity: 0.07; /* Сделал поярче, чтобы было видно */
+            opacity: 0.05;
             pointer-events: none;
-            z-index: 1;
+            z-index: 0;
         }
 
         #cursor {
@@ -33,10 +33,10 @@
             transform: translate(-50%, -50%);
         }
 
-        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 2; }
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
 
         .content {
-            position: relative; z-index: 3;
+            position: relative; z-index: 2;
             display: flex; justify-content: center; align-items: center;
             height: 100vh; color: #ffffff;
             font-family: 'Bahnschrift', 'Inter', sans-serif; text-align: center;
@@ -48,17 +48,15 @@
             will-change: left, top;
         }
         
-        /* МЯГКИЙ ГЛИТЧ (ТОЛЬКО ЦВЕТ) */
         h1 { margin: 0; font-size: 2.5em; transition: 0.3s; }
-        h1:hover {
-            text-shadow: 3px 0 rgba(255,0,0,0.7), -3px 0 rgba(0,255,255,0.7);
-        }
+        /* Легкое свечение при наведении вместо жесткого глитча */
+        h1:hover { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
         #quote { margin-top: 15px; font-size: 0.9em; opacity: 0.12; font-style: italic; }
 
         .footer-links {
             position: absolute; bottom: 30px; left: 50%;
-            transform: translateX(-50%); z-index: 10;
+            transform: translateX(-50%); z-index: 3;
             display: flex; gap: 25px;
         }
         .footer-links a {
@@ -75,7 +73,6 @@
     </style>
 </head>
 <body oncontextmenu="return false;"> 
-    <div class="noise-layer"></div>
     <div id="cursor"></div>
     <div id="particles-js"></div>
 
