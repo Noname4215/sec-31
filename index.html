@@ -21,14 +21,12 @@
 
   <style>
     :root {
-      --bg-1: #000000;
-      --bg-2: #07070a;
-      --bg-3: #12090b;
-      --text: #f5f5f5;
-      --muted: rgba(255, 255, 255, 0.14);
-      --soft: rgba(255, 255, 255, 0.08);
-      --cursor: rgba(255, 255, 255, 0.55);
-      --glow: rgba(255, 255, 255, 0.6);
+      --bg-main: #000000;
+      --text: #f4f4f4;
+      --soft-text: rgba(255, 255, 255, 0.86);
+      --muted-text: rgba(255, 255, 255, 0.14);
+      --line: rgba(255, 255, 255, 0.55);
+      --link: rgba(255, 255, 255, 0.34);
     }
 
     * {
@@ -43,7 +41,7 @@
       height: 100%;
       overflow: hidden;
       background:
-        radial-gradient(circle at 50% 45%, #111114 0%, #08080b 35%, #020202 68%, #000000 100%);
+        radial-gradient(circle at 50% 45%, #111217 0%, #07080b 34%, #020202 68%, #000000 100%);
       color: var(--text);
       font-family: 'Bahnschrift', 'Inter', sans-serif;
       user-select: none;
@@ -52,81 +50,140 @@
 
     body {
       position: relative;
-      animation: screenFlicker 7s infinite;
+      animation: screenFlicker 8s infinite;
     }
 
     @keyframes screenFlicker {
       0%, 100% { filter: brightness(1) contrast(1); }
-      47% { filter: brightness(1) contrast(1); }
-      48% { filter: brightness(0.992) contrast(1.01); }
-      49% { filter: brightness(1.008) contrast(1.02); }
-      50% { filter: brightness(0.995) contrast(1.01); }
-      51% { filter: brightness(1.002) contrast(1); }
+      48% { filter: brightness(1) contrast(1); }
+      49% { filter: brightness(0.992) contrast(1.01); }
+      50% { filter: brightness(1.006) contrast(1.02); }
+      51% { filter: brightness(0.996) contrast(1.01); }
       52% { filter: brightness(1) contrast(1); }
     }
 
-    /* Глубинные размытые пятна */
-    .bg-blur {
+    /* Фоновые размытые пятна */
+    .bg-blur-wrap {
       position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-blur {
+      position: absolute;
       border-radius: 50%;
       filter: blur(130px);
-      pointer-events: none;
-      z-index: 0;
       opacity: 0.12;
       mix-blend-mode: screen;
-      will-change: transform;
+      will-change: transform, opacity;
     }
 
     .blur-1 {
       width: 360px;
       height: 360px;
-      top: 8%;
-      left: 10%;
-      background: rgba(95, 105, 180, 0.16);
-      animation: drift1 18s ease-in-out infinite alternate;
+      top: 6%;
+      left: 8%;
+      background: rgba(95, 110, 190, 0.14);
+      animation: blurFloat1 18s ease-in-out infinite alternate;
     }
 
     .blur-2 {
       width: 420px;
       height: 420px;
       right: 8%;
-      bottom: 10%;
-      background: rgba(120, 30, 40, 0.14);
-      animation: drift2 24s ease-in-out infinite alternate;
+      bottom: 8%;
+      background: rgba(110, 26, 40, 0.14);
+      animation: blurFloat2 23s ease-in-out infinite alternate;
     }
 
     .blur-3 {
       width: 260px;
       height: 260px;
-      left: 45%;
-      top: 70%;
-      background: rgba(190, 190, 210, 0.05);
-      animation: drift3 20s ease-in-out infinite alternate;
+      left: 42%;
+      top: 68%;
+      background: rgba(210, 210, 230, 0.05);
+      animation: blurFloat3 20s ease-in-out infinite alternate;
     }
 
-    @keyframes drift1 {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(60px, -30px) scale(1.05); }
+    @keyframes blurFloat1 {
+      from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.1; }
+      to   { transform: translate3d(55px, -28px, 0) scale(1.05); opacity: 0.13; }
     }
 
-    @keyframes drift2 {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(-70px, 35px) scale(0.96); }
+    @keyframes blurFloat2 {
+      from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.1; }
+      to   { transform: translate3d(-65px, 34px, 0) scale(0.96); opacity: 0.14; }
     }
 
-    @keyframes drift3 {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(25px, -40px) scale(1.08); }
+    @keyframes blurFloat3 {
+      from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.04; }
+      to   { transform: translate3d(20px, -36px, 0) scale(1.08); opacity: 0.07; }
     }
 
-    /* Частицы/пыль */
+    /* Призрачные надписи */
+    .ghost-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .ghost {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.03);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      filter: blur(1.5px);
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(255,255,255,0.02);
+      user-select: none;
+    }
+
+    .ghost-1 {
+      top: 10%;
+      left: 7%;
+      font-size: clamp(2rem, 4vw, 4rem);
+      animation: ghostFloat1 16s ease-in-out infinite alternate;
+    }
+
+    .ghost-2 {
+      right: 8%;
+      bottom: 20%;
+      font-size: clamp(1rem, 2vw, 1.7rem);
+      animation: ghostFloat2 20s ease-in-out infinite alternate;
+    }
+
+    .ghost-3 {
+      left: 61%;
+      top: 54%;
+      font-size: clamp(1.1rem, 2.4vw, 2rem);
+      animation: ghostFloat3 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes ghostFloat1 {
+      from { transform: translate3d(0, 0, 0); opacity: 0.02; }
+      to   { transform: translate3d(18px, -10px, 0); opacity: 0.04; }
+    }
+
+    @keyframes ghostFloat2 {
+      from { transform: translate3d(0, 0, 0); opacity: 0.018; }
+      to   { transform: translate3d(-14px, 11px, 0); opacity: 0.034; }
+    }
+
+    @keyframes ghostFloat3 {
+      from { transform: translate3d(0, 0, 0); opacity: 0.02; }
+      to   { transform: translate3d(12px, -15px, 0); opacity: 0.036; }
+    }
+
+    /* Частицы */
     #particles-js {
       position: fixed;
       inset: 0;
       z-index: 1;
     }
 
-    /* Grain / noise */
+    /* Noise */
     .noise {
       position: fixed;
       inset: -20%;
@@ -134,8 +191,8 @@
       z-index: 3;
       opacity: 0.07;
       background-image:
-        radial-gradient(rgba(255,255,255,0.35) 0.6px, transparent 0.8px),
-        radial-gradient(rgba(255,255,255,0.12) 0.5px, transparent 0.7px);
+        radial-gradient(rgba(255,255,255,0.32) 0.6px, transparent 0.85px),
+        radial-gradient(rgba(255,255,255,0.11) 0.5px, transparent 0.75px);
       background-size: 8px 8px, 11px 11px;
       background-position: 0 0, 4px 5px;
       mix-blend-mode: soft-light;
@@ -156,7 +213,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 4;
-      opacity: 0.05;
+      opacity: 0.045;
       background: repeating-linear-gradient(
         to bottom,
         rgba(255,255,255,0.08) 0px,
@@ -167,130 +224,34 @@
       mix-blend-mode: soft-light;
     }
 
-    /* Курсор */
-    #cursor {
-      width: 20px;
-      height: 20px;
-      border: 1px solid var(--cursor);
-      border-radius: 50%;
+    /* Виньетка */
+    .vignette {
       position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      inset: 0;
       pointer-events: none;
-      z-index: 9999;
-      transition:
-        width 0.25s ease,
-        height 0.25s ease,
-        background 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.06s linear;
-      box-shadow: 0 0 0 rgba(255,255,255,0);
-      backdrop-filter: blur(1px);
-    }
-
-    /* Контент */
-    .content {
-      position: relative;
       z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      padding: 24px;
+      background: radial-gradient(
+        circle at center,
+        transparent 30%,
+        rgba(0, 0, 0, 0.10) 58%,
+        rgba(0, 0, 0, 0.34) 100%
+      );
     }
 
-    .text-box {
-      position: relative;
-      max-width: 680px;
-      padding: 28px 24px;
-      transform: translate3d(0, 0, 0);
-      transition: transform 0.32s ease-out;
-      will-change: transform;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
-    }
-
-    .desc {
-      margin: 14px 0 0;
-      font-size: 1rem;
-      line-height: 1.7;
-      color: rgba(255, 255, 255, 0.88);
-      text-shadow: 0 0 14px rgba(255, 255, 255, 0.03);
-    }
-
-    #quote {
-      margin-top: 18px;
-      font-size: 0.92rem;
-      opacity: 0.14;
-      font-style: italic;
-      letter-spacing: 0.01em;
-      min-height: 1.2em;
-    }
-
-    .handwritten {
-      font-family: 'Shadows Into Light', cursive;
-      font-size: 1.2em;
-      display: inline-block;
-      margin-left: 2px;
-      margin-right: 2px;
-      transform: rotate(-3deg);
-      color: #ffffff;
-      text-shadow: 0 0 10px rgba(255,255,255,0.08);
-    }
-
-    /* Footer links */
-    .footer-links {
-      position: fixed;
-      left: 50%;
-      bottom: 30px;
-      transform: translateX(-50%);
-      z-index: 6;
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .footer-links a {
-      color: rgba(255,255,255,0.42);
-      text-decoration: none;
-      font-size: 22px;
-      transition:
-        opacity 0.28s ease,
-        transform 0.28s ease,
-        text-shadow 0.28s ease,
-        color 0.28s ease;
-    }
-
-    .footer-links a:hover {
-      color: rgba(255,255,255,0.96);
-      transform: translateY(-3px);
-      text-shadow: 0 0 18px rgba(255,255,255,0.45);
-    }
-
-    /* Глитч-вспышка */
+    /* Короткая glitch-вспышка */
     .glitch-flash {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 7;
+      z-index: 6;
       opacity: 0;
       background:
         linear-gradient(
           180deg,
           transparent 0%,
-          rgba(255,255,255,0.02) 48%,
+          rgba(255,255,255,0.02) 47%,
           rgba(255,255,255,0.05) 50%,
-          transparent 52%,
+          transparent 53%,
           transparent 100%
         );
       mix-blend-mode: screen;
@@ -302,15 +263,130 @@
 
     @keyframes glitchFlash {
       0%   { opacity: 0; transform: translateX(0); }
-      20%  { opacity: 0.18; transform: translateX(-2px); }
+      20%  { opacity: 0.16; transform: translateX(-2px); }
       40%  { opacity: 0.06; transform: translateX(2px); }
-      60%  { opacity: 0.14; transform: translateX(-1px); }
+      60%  { opacity: 0.12; transform: translateX(-1px); }
       100% { opacity: 0; transform: translateX(0); }
     }
 
-    /* Мобилки */
+    /* Курсор */
+    #cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition:
+        width 0.25s ease,
+        height 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+      box-shadow: 0 0 0 rgba(255,255,255,0);
+      backdrop-filter: blur(1px);
+    }
+
+    /* Контент */
+    .content {
+      position: relative;
+      z-index: 7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .text-box {
+      position: relative;
+      max-width: 700px;
+      padding: 28px 24px;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.3s ease-out;
+      will-change: transform;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-shadow:
+        0 0 20px rgba(255,255,255,0.06),
+        0 0 40px rgba(255,255,255,0.02);
+    }
+
+    .desc {
+      margin: 14px 0 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--soft-text);
+      text-shadow: 0 0 16px rgba(255,255,255,0.03);
+    }
+
+    .handwritten {
+      display: inline-block;
+      margin: 0 2px;
+      font-family: 'Shadows Into Light', cursive;
+      font-size: 1.2em;
+      color: #ffffff;
+      transform: rotate(-3deg);
+      text-shadow: 0 0 10px rgba(255,255,255,0.08);
+    }
+
+    #quote {
+      margin-top: 18px;
+      min-height: 1.2em;
+      font-size: 0.92rem;
+      font-style: italic;
+      letter-spacing: 0.01em;
+      opacity: 0.14;
+      text-shadow: 0 0 12px rgba(255,255,255,0.02);
+      transition: opacity 0.8s ease;
+    }
+
+    /* Footer */
+    .footer-links {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--link);
+      text-decoration: none;
+      font-size: 22px;
+      filter: blur(0.2px);
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        text-shadow 0.3s ease,
+        color 0.3s ease,
+        filter 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: rgba(255,255,255,0.96);
+      transform: translateY(-3px) scale(1.03);
+      text-shadow: 0 0 18px rgba(255,255,255,0.35);
+      filter: blur(0);
+    }
+
     @media (max-width: 768px) {
-      html, body {
+      html,
+      body {
         cursor: auto;
       }
 
@@ -340,17 +416,30 @@
       .scanlines {
         opacity: 0.03;
       }
+
+      .ghost {
+        opacity: 0.5;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-blur blur-1"></div>
-  <div class="bg-blur blur-2"></div>
-  <div class="bg-blur blur-3"></div>
+  <div class="bg-blur-wrap">
+    <div class="bg-blur blur-1"></div>
+    <div class="bg-blur blur-2"></div>
+    <div class="bg-blur blur-3"></div>
+  </div>
+
+  <div class="ghost-layer">
+    <div class="ghost ghost-1">019</div>
+    <div class="ghost ghost-2">dream residue</div>
+    <div class="ghost ghost-3">fine</div>
+  </div>
 
   <div id="particles-js"></div>
   <div class="noise"></div>
   <div class="scanlines"></div>
+  <div class="vignette"></div>
   <div class="glitch-flash" id="glitchFlash"></div>
   <div id="cursor"></div>
 
@@ -380,9 +469,10 @@
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
     // Кастомный курсор
     const cursor = document.getElementById('cursor');
-    const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
     if (!isTouch) {
       document.addEventListener('mousemove', (e) => {
@@ -395,8 +485,8 @@
           cursor.style.width = '42px';
           cursor.style.height = '42px';
           cursor.style.background = 'rgba(255,255,255,0.08)';
-          cursor.style.borderColor = 'rgba(255,255,255,0.8)';
-          cursor.style.boxShadow = '0 0 18px rgba(255,255,255,0.12)';
+          cursor.style.borderColor = 'rgba(255,255,255,0.82)';
+          cursor.style.boxShadow = '0 0 18px rgba(255,255,255,0.14)';
         });
 
         link.addEventListener('mouseleave', () => {
@@ -411,22 +501,35 @@
 
     // Цитаты
     const quotes = [
-      "random people in a big city",
-      "не бойся",
-      "сделать что-то невозможное так трудно",
-      "dream residue",
-      "measure 19",
-      "all this noise feels familiar",
-      "я всё ещё здесь",
-      "the room remembers",
-      "sunlight through broken glass",
-      "nothing is wrong / everything is wrong"
+      'random people in a big city',
+      'не бойся',
+      'dream residue',
+      'the room remembers',
+      'sunlight through broken glass',
+      'everything is quiet enough to hurt',
+      'measure 19',
+      'i was here before',
+      'nothing is wrong / everything is wrong',
+      'the noise never really leaves'
     ];
 
-    document.getElementById('quote').innerText =
-      quotes[Math.floor(Math.random() * quotes.length)];
+    const quoteEl = document.getElementById('quote');
 
-    // Частицы как пыль
+    function setRandomQuote() {
+      quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    setRandomQuote();
+
+    setInterval(() => {
+      quoteEl.style.opacity = '0';
+      setTimeout(() => {
+        setRandomQuote();
+        quoteEl.style.opacity = '0.14';
+      }, 700);
+    }, 14000);
+
+    // Частицы
     particlesJS('particles-js', {
       particles: {
         number: {
@@ -454,10 +557,7 @@
         },
         size: {
           value: 2.2,
-          random: true,
-          anim: {
-            enable: false
-          }
+          random: true
         },
         line_linked: {
           enable: false
@@ -487,7 +587,7 @@
       retina_detect: true
     });
 
-    // Плавающий центральный блок
+    // Плавающий текстовый блок
     const box = document.getElementById('float-box');
 
     if (!isTouch) {
@@ -498,43 +598,43 @@
       });
     }
 
-    // Меняющийся title
-    const tabTitles = ['019', 'S3CRET?', 'Dream', 'Sun', '^_^'];
-    let titleIndex = 0;
-
-    setInterval(() => {
-      document.title = tabTitles[titleIndex];
-      titleIndex = (titleIndex + 1) % tabTitles.length;
-    }, 1200);
-
     // Редкие глитч-вспышки
     const glitchFlash = document.getElementById('glitchFlash');
 
-    function triggerGlitch() {
-      glitchFlash.classList.remove('active');
-      void glitchFlash.offsetWidth;
-      glitchFlash.classList.add('active');
+    function scheduleGlitch() {
+      const delay = 7000 + Math.random() * 12000;
 
-      const next = 7000 + Math.random() * 12000;
-      setTimeout(triggerGlitch, next);
+      setTimeout(() => {
+        glitchFlash.classList.remove('active');
+        void glitchFlash.offsetWidth;
+        glitchFlash.classList.add('active');
+        scheduleGlitch();
+      }, delay);
     }
 
-    setTimeout(triggerGlitch, 5000);
+    scheduleGlitch();
 
-    // Очень мягкое "дыхание" blur-слоёв по мыши
-    const blurs = document.querySelectorAll('.bg-blur');
+    // Спокойный title с редкими аномалиями
+    const defaultTitle = '^_^';
+    const rareTitles = ['019', 'dream residue', 'fine', 'sun'];
 
-    if (!isTouch) {
-      document.addEventListener('mousemove', (e) => {
-        const offsetX = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-        const offsetY = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+    document.title = defaultTitle;
 
-        blurs.forEach((blur, index) => {
-          const depth = (index + 1) * 8;
-          blur.style.transform += ` translate(${offsetX * depth}px, ${offsetY * depth}px)`;
-        });
-      });
+    function scheduleTitleShift() {
+      const delay = 12000 + Math.random() * 8000;
+
+      setTimeout(() => {
+        const randomTitle = rareTitles[Math.floor(Math.random() * rareTitles.length)];
+        document.title = randomTitle;
+
+        setTimeout(() => {
+          document.title = defaultTitle;
+          scheduleTitleShift();
+        }, 700);
+      }, delay);
     }
+
+    scheduleTitleShift();
   </script>
 </body>
 </html>
