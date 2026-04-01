@@ -1,194 +1,540 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Я ТУТ</title>
-    <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/736x/49/8c/22/498c22cf5a641c3205af5f3c83cac406.jpg">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>^_^</title>
 
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
-    
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
-            overflow: hidden;
-            user-select: none;
-            cursor: none; 
-        }
+  <link
+    rel="icon"
+    type="image/x-icon"
+    href="https://i.pinimg.com/736x/49/8c/22/498c22cf5a641c3205af5f3c83cac406.jpg"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Shadows+Into+Light&display=swap"
+    rel="stylesheet"
+  />
 
-        #cursor {
-            width: 20px;
-            height: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
-            transform: translate(-50%, -50%);
-        }
+  <style>
+    :root {
+      --bg-1: #000000;
+      --bg-2: #07070a;
+      --bg-3: #12090b;
+      --text: #f5f5f5;
+      --muted: rgba(255, 255, 255, 0.14);
+      --soft: rgba(255, 255, 255, 0.08);
+      --cursor: rgba(255, 255, 255, 0.55);
+      --glow: rgba(255, 255, 255, 0.6);
+    }
 
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        .content {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #ffffff;
-            font-family: 'Bahnschrift', 'Inter', sans-serif;
-            text-align: center;
-        }
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, #111114 0%, #08080b 35%, #020202 68%, #000000 100%);
+      color: var(--text);
+      font-family: 'Bahnschrift', 'Inter', sans-serif;
+      user-select: none;
+      cursor: none;
+    }
 
-        .text-box {
-            max-width: 600px;
-            padding: 20px;
-            position: relative; 
-            transition: left 0.4s ease-out, top 0.4s ease-out;
-            will-change: left, top;
-        }
-        
-        h1 { margin: 0; font-size: 2.5em; }
+    body {
+      position: relative;
+      animation: screenFlicker 7s infinite;
+    }
 
-        #quote {
-            margin-top: 15px;
-            font-size: 0.9em;
-            opacity: 0.12;
-            font-style: italic;
-        }
+    @keyframes screenFlicker {
+      0%, 100% { filter: brightness(1) contrast(1); }
+      47% { filter: brightness(1) contrast(1); }
+      48% { filter: brightness(0.992) contrast(1.01); }
+      49% { filter: brightness(1.008) contrast(1.02); }
+      50% { filter: brightness(0.995) contrast(1.01); }
+      51% { filter: brightness(1.002) contrast(1); }
+      52% { filter: brightness(1) contrast(1); }
+    }
 
-        .footer-links {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-            display: flex;
-            gap: 25px;
-        }
-        .footer-links a {
-            color: #ffffff;
-            font-size: 22px;
-            opacity: 0.4;
-            transition: all 0.4s ease;
-            text-decoration: none;
-        }
-        .footer-links a:hover {
-            opacity: 1;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-            transform: translateY(-3px);
-        }
+    /* Глубинные размытые пятна */
+    .bg-blur {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(130px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.12;
+      mix-blend-mode: screen;
+      will-change: transform;
+    }
 
-        .handwritten {
-            font-family: 'Shadows Into Light', cursive;
-            font-size: 1.2em;
-            color: #ffffff;
-            display: inline-block;
-            transform: rotate(-3deg);
-            margin-left: 4px;
-        }
-    </style>
+    .blur-1 {
+      width: 360px;
+      height: 360px;
+      top: 8%;
+      left: 10%;
+      background: rgba(95, 105, 180, 0.16);
+      animation: drift1 18s ease-in-out infinite alternate;
+    }
+
+    .blur-2 {
+      width: 420px;
+      height: 420px;
+      right: 8%;
+      bottom: 10%;
+      background: rgba(120, 30, 40, 0.14);
+      animation: drift2 24s ease-in-out infinite alternate;
+    }
+
+    .blur-3 {
+      width: 260px;
+      height: 260px;
+      left: 45%;
+      top: 70%;
+      background: rgba(190, 190, 210, 0.05);
+      animation: drift3 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift1 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(60px, -30px) scale(1.05); }
+    }
+
+    @keyframes drift2 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(-70px, 35px) scale(0.96); }
+    }
+
+    @keyframes drift3 {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(25px, -40px) scale(1.08); }
+    }
+
+    /* Частицы/пыль */
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+
+    /* Grain / noise */
+    .noise {
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.07;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.35) 0.6px, transparent 0.8px),
+        radial-gradient(rgba(255,255,255,0.12) 0.5px, transparent 0.7px);
+      background-size: 8px 8px, 11px 11px;
+      background-position: 0 0, 4px 5px;
+      mix-blend-mode: soft-light;
+      animation: noiseShift 0.22s steps(2) infinite;
+    }
+
+    @keyframes noiseShift {
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(-1%, 1%); }
+      50%  { transform: translate(1%, -1%); }
+      75%  { transform: translate(0.5%, 1%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Scanlines */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.05;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.08) 0px,
+        rgba(255,255,255,0.08) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: soft-light;
+    }
+
+    /* Курсор */
+    #cursor {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--cursor);
+      border-radius: 50%;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition:
+        width 0.25s ease,
+        height 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.06s linear;
+      box-shadow: 0 0 0 rgba(255,255,255,0);
+      backdrop-filter: blur(1px);
+    }
+
+    /* Контент */
+    .content {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .text-box {
+      position: relative;
+      max-width: 680px;
+      padding: 28px 24px;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.32s ease-out;
+      will-change: transform;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
+    }
+
+    .desc {
+      margin: 14px 0 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.88);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.03);
+    }
+
+    #quote {
+      margin-top: 18px;
+      font-size: 0.92rem;
+      opacity: 0.14;
+      font-style: italic;
+      letter-spacing: 0.01em;
+      min-height: 1.2em;
+    }
+
+    .handwritten {
+      font-family: 'Shadows Into Light', cursive;
+      font-size: 1.2em;
+      display: inline-block;
+      margin-left: 2px;
+      margin-right: 2px;
+      transform: rotate(-3deg);
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.08);
+    }
+
+    /* Footer links */
+    .footer-links {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      z-index: 6;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.42);
+      text-decoration: none;
+      font-size: 22px;
+      transition:
+        opacity 0.28s ease,
+        transform 0.28s ease,
+        text-shadow 0.28s ease,
+        color 0.28s ease;
+    }
+
+    .footer-links a:hover {
+      color: rgba(255,255,255,0.96);
+      transform: translateY(-3px);
+      text-shadow: 0 0 18px rgba(255,255,255,0.45);
+    }
+
+    /* Глитч-вспышка */
+    .glitch-flash {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 7;
+      opacity: 0;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(255,255,255,0.02) 48%,
+          rgba(255,255,255,0.05) 50%,
+          transparent 52%,
+          transparent 100%
+        );
+      mix-blend-mode: screen;
+    }
+
+    .glitch-flash.active {
+      animation: glitchFlash 0.18s linear 1;
+    }
+
+    @keyframes glitchFlash {
+      0%   { opacity: 0; transform: translateX(0); }
+      20%  { opacity: 0.18; transform: translateX(-2px); }
+      40%  { opacity: 0.06; transform: translateX(2px); }
+      60%  { opacity: 0.14; transform: translateX(-1px); }
+      100% { opacity: 0; transform: translateX(0); }
+    }
+
+    /* Мобилки */
+    @media (max-width: 768px) {
+      html, body {
+        cursor: auto;
+      }
+
+      #cursor {
+        display: none;
+      }
+
+      .text-box {
+        max-width: 92vw;
+        padding: 20px 14px;
+        transition: none;
+      }
+
+      .desc {
+        font-size: 0.95rem;
+      }
+
+      .footer-links {
+        bottom: 22px;
+        gap: 20px;
+      }
+
+      .noise {
+        opacity: 0.045;
+      }
+
+      .scanlines {
+        opacity: 0.03;
+      }
+    }
+  </style>
 </head>
-<body oncontextmenu="return false;"> 
-    <div id="cursor"></div>
-    <div id="particles-js"></div>
+<body>
+  <div class="bg-blur blur-1"></div>
+  <div class="bg-blur blur-2"></div>
+  <div class="bg-blur blur-3"></div>
 
-    <div class="content">
-        <div id="float-box" class="text-box" style="left: 0px; top: 0px;">
-            <h1>Z.R</h1>
-            <p>lost in gmod & dota. 7.5k hours of <span class="handwritten">escapism</span>. i’m <span class="handwritten">fine</span>, really.</p>
-            <div id="quote"></div>
-        </div>
+  <div id="particles-js"></div>
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+  <div class="glitch-flash" id="glitchFlash"></div>
+  <div id="cursor"></div>
+
+  <div class="content">
+    <div id="float-box" class="text-box">
+      <h1>Z.R</h1>
+      <p class="desc">
+        lost in gmod & dota. 7.5k hours of
+        <span class="handwritten">escapism</span>.
+        i’m <span class="handwritten">fine</span>, really.
+      </p>
+      <div id="quote"></div>
     </div>
+  </div>
 
-    <div class="footer-links">
-        <a href="" target="_blank"><i class="fab fa-youtube"></i></a>
-        <a href="" target="_blank"><i class="fab fa-steam"></i></a>
-        <a href="" target="_blank"><i class="fab fa-github"></i></a>
-    </div>
+  <div class="footer-links">
+    <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://steamcommunity.com/" target="_blank" rel="noopener noreferrer" aria-label="Steam">
+      <i class="fab fa-steam"></i>
+    </a>
+    <a href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <i class="fab fa-github"></i>
+    </a>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    // Кастомный курсор
+    const cursor = document.getElementById('cursor');
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    if (!isTouch) {
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+
+      document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          cursor.style.width = '42px';
+          cursor.style.height = '42px';
+          cursor.style.background = 'rgba(255,255,255,0.08)';
+          cursor.style.borderColor = 'rgba(255,255,255,0.8)';
+          cursor.style.boxShadow = '0 0 18px rgba(255,255,255,0.12)';
         });
 
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.style.width = '40px';
-                cursor.style.height = '40px';
-                cursor.style.background = 'rgba(255, 255, 255, 0.1)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
-                cursor.style.background = 'transparent';
-            });
+        link.addEventListener('mouseleave', () => {
+          cursor.style.width = '20px';
+          cursor.style.height = '20px';
+          cursor.style.background = 'transparent';
+          cursor.style.borderColor = 'rgba(255,255,255,0.55)';
+          cursor.style.boxShadow = '0 0 0 rgba(255,255,255,0)';
         });
+      });
+    }
 
-        const quotes = [
-            "Random people in a big city",
-            "Яйца",
-            "Сделать что-то невозможное так трудно",
-            "Измерение 19",
-            "Не бойся",
-            "Огромный хомяк-пенис"
-        ];
-        document.getElementById('quote').innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    // Цитаты
+    const quotes = [
+      "random people in a big city",
+      "не бойся",
+      "сделать что-то невозможное так трудно",
+      "dream residue",
+      "measure 19",
+      "all this noise feels familiar",
+      "я всё ещё здесь",
+      "the room remembers",
+      "sunlight through broken glass",
+      "nothing is wrong / everything is wrong"
+    ];
 
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80 },
-                "color": { "value": "#ffffff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": false },
-                "move": { "enable": true, "speed": 1, "random": true, "out_mode": "out" }
-            },
-            "interactivity": { 
-                "events": { 
-                    "onhover": { "enable": false }, 
-                    "onclick": { "enable": false }
-                } 
-            },
-            "retina_detect": true
+    document.getElementById('quote').innerText =
+      quotes[Math.floor(Math.random() * quotes.length)];
+
+    // Частицы как пыль
+    particlesJS('particles-js', {
+      particles: {
+        number: {
+          value: 48,
+          density: {
+            enable: true,
+            value_area: 900
+          }
+        },
+        color: {
+          value: ['#d9d9d9', '#bdbdc7', '#ffffff']
+        },
+        shape: {
+          type: 'circle'
+        },
+        opacity: {
+          value: 0.18,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 0.25,
+            opacity_min: 0.05,
+            sync: false
+          }
+        },
+        size: {
+          value: 2.2,
+          random: true,
+          anim: {
+            enable: false
+          }
+        },
+        line_linked: {
+          enable: false
+        },
+        move: {
+          enable: true,
+          speed: 0.55,
+          direction: 'none',
+          random: true,
+          straight: false,
+          out_mode: 'out',
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: {
+            enable: false
+          },
+          onclick: {
+            enable: false
+          },
+          resize: true
+        }
+      },
+      retina_detect: true
+    });
+
+    // Плавающий центральный блок
+    const box = document.getElementById('float-box');
+
+    if (!isTouch) {
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX - window.innerWidth / 2) / 45;
+        const y = (e.clientY - window.innerHeight / 2) / 55;
+        box.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      });
+    }
+
+    // Меняющийся title
+    const tabTitles = ['019', 'S3CRET?', 'Dream', 'Sun', '^_^'];
+    let titleIndex = 0;
+
+    setInterval(() => {
+      document.title = tabTitles[titleIndex];
+      titleIndex = (titleIndex + 1) % tabTitles.length;
+    }, 1200);
+
+    // Редкие глитч-вспышки
+    const glitchFlash = document.getElementById('glitchFlash');
+
+    function triggerGlitch() {
+      glitchFlash.classList.remove('active');
+      void glitchFlash.offsetWidth;
+      glitchFlash.classList.add('active');
+
+      const next = 7000 + Math.random() * 12000;
+      setTimeout(triggerGlitch, next);
+    }
+
+    setTimeout(triggerGlitch, 5000);
+
+    // Очень мягкое "дыхание" blur-слоёв по мыши
+    const blurs = document.querySelectorAll('.bg-blur');
+
+    if (!isTouch) {
+      document.addEventListener('mousemove', (e) => {
+        const offsetX = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+        const offsetY = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+
+        blurs.forEach((blur, index) => {
+          const depth = (index + 1) * 8;
+          blur.style.transform += ` translate(${offsetX * depth}px, ${offsetY * depth}px)`;
         });
-
-        const box = document.getElementById('float-box');
-        document.addEventListener('mousemove', (e) => {
-            let x = (e.pageX - window.innerWidth / 2) / 70;
-            let y = (e.pageY - window.innerHeight / 2) / 70;
-            box.style.left = x + 'px';
-            box.style.top = y + 'px';
-        });
-
-        const tabTitles = ["019", "S3CRET?", "Yaitsa", "Dream", "Sun"];
-        let i = 0;
-        setInterval(() => {
-            document.title = tabTitles[i];
-            i = (i + 1) % tabTitles.length;
-        }, 600);
-
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 85 || e.keyCode === 83 || e.keyCode === 73)) {
-                e.preventDefault();
-            }
-        });
-    </script>
+      });
+    }
+  </script>
 </body>
 </html>
