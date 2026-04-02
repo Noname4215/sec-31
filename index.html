@@ -19,10 +19,6 @@
     rel="stylesheet"
   />
 
-  <!-- p5 + p5.ascii -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5.ascii@1.2.0/dist/p5.ascii.min.js"></script>
-
   <style>
     :root {
       --text: #f4f4f4;
@@ -31,9 +27,12 @@
       --link: rgba(255, 255, 255, 0.34);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -133,7 +132,6 @@
       filter: blur(1.5px);
       white-space: nowrap;
       text-shadow: 0 0 12px rgba(255,255,255,0.02);
-      user-select: none;
     }
 
     .ghost-1 {
@@ -265,7 +263,7 @@
 
     .text-box {
       position: relative;
-      width: 720px;
+      width: 760px;
       max-width: 92vw;
       padding: 28px 24px;
       transform: translate3d(0, 0, 0);
@@ -273,42 +271,26 @@
       will-change: transform;
     }
 
-    /* Контейнер ASCII заголовка */
-    .ascii-title-wrap {
-      position: relative;
-      width: 100%;
-      height: 170px;
-      margin: 0 auto 6px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    /* pre, которое генерит p5.ascii */
-    #asciiMount pre {
-      margin: 0;
-      padding: 0;
-      line-height: 0.86em;
-      font-size: 11px;
-      color: #e8eeff;
-      text-shadow:
-        0 0 10px rgba(220, 230, 255, 0.06),
-        0 0 24px rgba(220, 230, 255, 0.02);
-      opacity: 0.92;
-      mix-blend-mode: screen;
+    .ascii-title {
+      margin: 0 auto;
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      line-height: 0.9em;
       letter-spacing: 0.02em;
-      filter: drop-shadow(0 0 8px rgba(220, 230, 255, 0.04));
-      user-select: none;
-    }
-
-    #asciiMount canvas {
-      display: none !important;
+      color: #eaf0ff;
+      white-space: pre;
+      text-align: left;
+      text-shadow:
+        0 0 10px rgba(220, 230, 255, 0.08),
+        0 0 22px rgba(220, 230, 255, 0.03);
+      opacity: 0.95;
+      filter: drop-shadow(0 0 8px rgba(220, 230, 255, 0.05));
+      min-height: 120px;
     }
 
     .desc {
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       font-size: 1rem;
       line-height: 1.7;
       color: var(--soft-text);
@@ -368,8 +350,13 @@
     }
 
     @media (max-width: 768px) {
-      html, body { cursor: auto; }
-      #cursor { display: none; }
+      html, body {
+        cursor: auto;
+      }
+
+      #cursor {
+        display: none;
+      }
 
       .text-box {
         width: 92vw;
@@ -377,13 +364,9 @@
         transition: none;
       }
 
-      .ascii-title-wrap {
-        height: 130px;
-      }
-
-      #asciiMount pre {
-        font-size: 8px;
-        line-height: 0.9em;
+      .ascii-title {
+        font-size: 7px;
+        min-height: 90px;
       }
 
       .desc {
@@ -422,9 +405,7 @@
 
   <div class="content">
     <div id="float-box" class="text-box">
-      <div class="ascii-title-wrap">
-        <div id="asciiMount" style="position:relative;width:100%;height:100%;"></div>
-      </div>
+      <pre id="ascii-title" class="ascii-title"></pre>
 
       <p class="desc">
         жить осознавая что смерть
@@ -453,8 +434,9 @@
       }
     });
 
-    // Курсор
+    // Кастомный курсор
     const cursor = document.getElementById('cursor');
+
     if (!isTouch) {
       document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
@@ -575,6 +557,7 @@
 
     // Плавающий блок
     const box = document.getElementById('float-box');
+
     if (!isTouch) {
       document.addEventListener('mousemove', (e) => {
         const x = (e.clientX - window.innerWidth / 2) / 45;
@@ -583,90 +566,90 @@
       });
     }
 
-    // ASCII Z.R через p5 + p5.ascii
-    let gfx, asciiArt;
-    let t = 0;
+    // ASCII Z.R
+    const asciiTitle = document.getElementById('ascii-title');
+    const asciiChars = ' .:-=+*#%@';
+    let asciiTime = 0;
 
-    function setup() {
-      const mount = document.getElementById('asciiMount');
-      const rect = mount.getBoundingClientRect();
+    function renderAsciiTitle() {
+      const width = window.innerWidth < 768 ? 22 : 32;
+      const height = window.innerWidth < 768 ? 8 : 10;
+      let output = '';
 
-      const cnv = createCanvas(rect.width, rect.height);
-      cnv.parent('asciiMount');
-      noCanvas(); // скрываем основной p5 canvas
+      for (let y = 0; y < height; y++) {
+        let row = '';
+        for (let x = 0; x < width; x++) {
+          const nx = (x - width / 2) / (width / 2);
+          const ny = (y - height / 2) / (height / 2);
 
-      gfx = createGraphics(rect.width, rect.height);
-      gfx.pixelDensity(1);
-      gfx.textFont('monospace');
-      gfx.textAlign(CENTER, CENTER);
+          const wave = Math.sin(asciiTime * 1.5 + x * 0.45 + y * 0.3) * 0.08;
 
-      asciiArt = new AsciiArt(this);
-      frameRate(24);
-    }
+          const zLeft = (
+            Math.abs(nx + 0.45) < 0.22 &&
+            Math.abs(ny) < 0.42 &&
+            Math.abs(ny - (nx + 0.45) * 1.5 + wave) < 0.16
+          ) || (
+            Math.abs(nx + 0.45) < 0.22 &&
+            Math.abs(ny) < 0.42 &&
+            Math.abs(ny + (nx + 0.45) * 1.5 - wave) < 0.16
+          );
 
-    function draw() {
-      const mount = document.getElementById('asciiMount');
-      if (!mount || !gfx) return;
+          const dot = (
+            Math.pow(nx - 0.02, 2) + Math.pow(ny + 0.02, 2) < 0.018
+          );
 
-      const w = mount.clientWidth;
-      const h = mount.clientHeight;
+          const rStem = (
+            Math.abs(nx - 0.30) < 0.08 &&
+            ny > -0.45 &&
+            ny < 0.42
+          );
 
-      if (gfx.width !== w || gfx.height !== h) {
-        gfx.resizeCanvas(w, h);
+          const rTop = (
+            Math.pow((nx - 0.43) / 0.17, 2) + Math.pow((ny + 0.18) / 0.18, 2) < 1.0 &&
+            ny < 0.02
+          );
+
+          const rLeg = (
+            nx > 0.32 && nx < 0.58 &&
+            Math.abs(ny - (nx - 0.38) * 1.7 + wave * 0.7) < 0.12 &&
+            ny > -0.02
+          );
+
+          let value = 0;
+
+          if (zLeft) value = 0.75;
+          if (dot) value = 1.0;
+          if (rStem || rTop || rLeg) value = 0.85;
+
+          // лёгкое фантомное эхо
+          const phantom = Math.sin(asciiTime * 2.1) * 0.03;
+          if (
+            (
+              Math.abs(nx + 0.42 + phantom) < 0.22 &&
+              Math.abs(ny - phantom) < 0.42 &&
+              Math.abs(ny - (nx + 0.42 + phantom) * 1.5) < 0.18
+            ) ||
+            (
+              Math.abs(nx - 0.28 + phantom) < 0.08 &&
+              ny > -0.45 &&
+              ny < 0.42
+            )
+          ) {
+            value = Math.max(value, 0.25);
+          }
+
+          const idx = Math.max(0, Math.min(asciiChars.length - 1, Math.floor(value * (asciiChars.length - 1))));
+          row += asciiChars[idx];
+        }
+        output += row + '\n';
       }
 
-      gfx.clear();
-      gfx.background(0, 0);
-
-      const mx = (mouseX || w / 2) - w / 2;
-      const my = (mouseY || h / 2) - h / 2;
-
-      const driftX = sin(t * 0.8) * 2.2 + mx * 0.0025;
-      const driftY = cos(t * 0.6) * 1.4 + my * 0.0015;
-
-      gfx.push();
-      gfx.translate(w / 2 + driftX, h / 2 + driftY);
-      gfx.fill(235, 240, 255);
-      gfx.noStroke();
-      gfx.textSize(min(w * 0.24, 92));
-      gfx.textStyle(BOLD);
-      gfx.text('Z.R', 0, 0);
-      gfx.pop();
-
-      // очень слабое фантомное эхо
-      gfx.push();
-      gfx.translate(w / 2 + driftX - 2, h / 2 + driftY);
-      gfx.fill(170, 190, 255, 40);
-      gfx.textSize(min(w * 0.24, 92));
-      gfx.textStyle(BOLD);
-      gfx.text('Z.R', 0, 0);
-      gfx.pop();
-
-      const ascii_arr = asciiArt.convert(gfx);
-      const ascii_html = asciiArt.typeArray2d(ascii_arr);
-
-      mount.querySelectorAll('pre').forEach(el => el.remove());
-
-      const pre = document.createElement('pre');
-      pre.innerHTML = ascii_html;
-      pre.style.position = 'absolute';
-      pre.style.left = '50%';
-      pre.style.top = '50%';
-      pre.style.transform = 'translate(-50%, -50%)';
-      pre.style.whiteSpace = 'pre';
-      pre.style.pointerEvents = 'none';
-      mount.appendChild(pre);
-
-      t += 0.035;
+      asciiTitle.textContent = output;
+      asciiTime += 0.035;
+      requestAnimationFrame(renderAsciiTitle);
     }
 
-    function windowResized() {
-      const mount = document.getElementById('asciiMount');
-      if (!mount) return;
-      const rect = mount.getBoundingClientRect();
-      resizeCanvas(rect.width, rect.height);
-      if (gfx) gfx.resizeCanvas(rect.width, rect.height);
-    }
+    renderAsciiTitle();
   </script>
 </body>
 </html>
