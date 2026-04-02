@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -27,9 +28,12 @@
       --link: rgba(255, 255, 255, 0.34);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -271,25 +275,25 @@
     .ascii-title-wrap {
       display: flex;
       justify-content: center;
-      align-items: center;
-      margin-bottom: 4px;
-      min-height: 150px;
+      align-items: flex-end;
+      margin-bottom: 14px;
+      min-height: 190px;
     }
 
     .ascii-title {
       display: inline-block;
       margin: 0;
       font-family: 'Courier New', monospace;
-      font-size: 9px;
-      line-height: 0.9em;
-      letter-spacing: 0.01em;
+      font-size: 12px;
+      line-height: 0.82em;
+      letter-spacing: 0;
       white-space: pre;
       text-align: left;
-      color: #eaf0ff;
+      color: #eef2ff;
       text-shadow:
-        0 0 10px rgba(220, 230, 255, 0.08),
-        0 0 22px rgba(220, 230, 255, 0.03);
-      opacity: 0.97;
+        0 0 12px rgba(220, 230, 255, 0.08),
+        0 0 28px rgba(220, 230, 255, 0.03);
+      opacity: 0.98;
       filter: drop-shadow(0 0 8px rgba(220, 230, 255, 0.05));
       user-select: none;
       pointer-events: none;
@@ -366,12 +370,13 @@
       }
 
       .ascii-title-wrap {
-        min-height: 100px;
+        min-height: 120px;
+        margin-bottom: 10px;
       }
 
       .ascii-title {
-        font-size: 6px;
-        line-height: 0.9em;
+        font-size: 7px;
+        line-height: 0.84em;
       }
 
       .desc {
@@ -433,10 +438,9 @@
   <script>
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-    // Запреты
+    // Запрет на Ctrl+S и Ctrl+U
     document.addEventListener('keydown', function (e) {
       const key = e.key ? e.key.toLowerCase() : '';
-
       if (
         (e.ctrlKey && key === 's') ||
         (e.ctrlKey && key === 'u')
@@ -445,7 +449,7 @@
       }
     });
 
-    // Курсор
+    // Кастомный курсор
     const cursor = document.getElementById('cursor');
 
     if (!isTouch) {
@@ -473,7 +477,7 @@
       });
     }
 
-    // Quotes
+    // Цитаты
     const quotes = [
       'random people in a big city',
       'не бойся',
@@ -512,7 +516,7 @@
       titleIndex = (titleIndex + 1) % tabTitles.length;
     }, 1200);
 
-    // Particles
+    // Частицы
     particlesJS('particles-js', {
       particles: {
         number: {
@@ -566,7 +570,7 @@
       retina_detect: true
     });
 
-    // Плавающий блок
+    // Плавающий текстовый блок
     const box = document.getElementById('float-box');
 
     if (!isTouch) {
@@ -577,9 +581,9 @@
       });
     }
 
-    // Живой ASCII Z.R
+    // Живой пересчитываемый ASCII Z.R
     const asciiTitle = document.getElementById('ascii-title');
-    const asciiChars = ' .,:;i1tfLCG08@';
+    const asciiChars = ' .,:;irsXA253hMHGS#9B&@';
     const asciiCanvas = document.createElement('canvas');
     const asciiCtx = asciiCanvas.getContext('2d');
 
@@ -595,8 +599,8 @@
     function renderAsciiTitle() {
       const isMobile = window.innerWidth < 768;
 
-      const renderWidth = isMobile ? 140 : 220;
-      const renderHeight = isMobile ? 48 : 70;
+      const renderWidth = isMobile ? 260 : 420;
+      const renderHeight = isMobile ? 90 : 140;
 
       asciiCanvas.width = renderWidth;
       asciiCanvas.height = renderHeight;
@@ -605,38 +609,35 @@
       asciiCtx.fillStyle = 'black';
       asciiCtx.fillRect(0, 0, renderWidth, renderHeight);
 
-      const driftX = Math.sin(asciiTime * 1.1) * 1.2 + asciiMouseX * 4;
-      const driftY = Math.cos(asciiTime * 0.9) * 0.8 + asciiMouseY * 3;
+      const driftX = Math.sin(asciiTime * 1.0) * 1.2 + asciiMouseX * 5;
+      const driftY = Math.cos(asciiTime * 0.8) * 1.1 + asciiMouseY * 3;
 
-      const fontSize = isMobile ? 28 : 40;
+      const fontSize = isMobile ? 58 : 92;
 
       asciiCtx.save();
-      asciiCtx.translate(renderWidth / 2 + driftX, renderHeight / 2 + driftY);
+      asciiCtx.translate(renderWidth / 2 + driftX, renderHeight / 2 + driftY + 8);
       asciiCtx.textAlign = 'center';
       asciiCtx.textBaseline = 'middle';
       asciiCtx.font = `bold ${fontSize}px monospace`;
 
-      // основной слой
       asciiCtx.globalAlpha = 1;
       asciiCtx.fillStyle = '#ffffff';
       asciiCtx.fillText('Z.R', 0, 0);
 
-      // холодное эхо
-      asciiCtx.globalAlpha = 0.18 + Math.sin(asciiTime * 2.0) * 0.03;
+      asciiCtx.globalAlpha = 0.14 + Math.sin(asciiTime * 1.7) * 0.02;
       asciiCtx.fillStyle = '#cfd8ff';
-      asciiCtx.fillText('Z.R', -2, 0);
+      asciiCtx.fillText('Z.R', -4, 0);
 
-      // тёплое эхо
-      asciiCtx.globalAlpha = 0.10 + Math.cos(asciiTime * 1.6) * 0.02;
+      asciiCtx.globalAlpha = 0.08 + Math.cos(asciiTime * 1.3) * 0.015;
       asciiCtx.fillStyle = '#ffdede';
-      asciiCtx.fillText('Z.R', 2, 0);
+      asciiCtx.fillText('Z.R', 4, 0);
 
       asciiCtx.restore();
 
       const img = asciiCtx.getImageData(0, 0, renderWidth, renderHeight).data;
 
-      const stepX = isMobile ? 4 : 4;
-      const stepY = isMobile ? 4 : 4;
+      const stepX = isMobile ? 5 : 6;
+      const stepY = isMobile ? 5 : 6;
 
       let output = '';
 
@@ -650,9 +651,7 @@
           const b = img[i + 2];
 
           const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-          // микрошум для "живости"
-          const noise = (Math.sin(asciiTime * 2 + x * 0.09 + y * 0.07) + 1) * 0.03;
+          const noise = (Math.sin(asciiTime * 1.8 + x * 0.04 + y * 0.03) + 1) * 0.02;
           const value = Math.max(0, Math.min(1, brightness + noise));
 
           const index = Math.floor(value * (asciiChars.length - 1));
@@ -663,7 +662,7 @@
       }
 
       asciiTitle.textContent = output;
-      asciiTime += 0.035;
+      asciiTime += 0.03;
       requestAnimationFrame(renderAsciiTitle);
     }
 
@@ -671,3 +670,4 @@
   </script>
 </body>
 </html>
+```
