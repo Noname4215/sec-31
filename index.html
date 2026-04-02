@@ -271,22 +271,31 @@
       will-change: transform;
     }
 
+    .ascii-title-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 4px;
+      min-height: 130px;
+    }
+
     .ascii-title {
-      margin: 0 auto;
       display: inline-block;
+      margin: 0;
       font-family: 'Courier New', monospace;
-      font-size: 10px;
+      font-size: 9px;
       line-height: 0.9em;
-      letter-spacing: 0.02em;
-      color: #eaf0ff;
+      letter-spacing: 0.015em;
       white-space: pre;
       text-align: left;
+      color: #eaf0ff;
       text-shadow:
         0 0 10px rgba(220, 230, 255, 0.08),
         0 0 22px rgba(220, 230, 255, 0.03);
-      opacity: 0.95;
+      opacity: 0.96;
       filter: drop-shadow(0 0 8px rgba(220, 230, 255, 0.05));
-      min-height: 120px;
+      user-select: none;
+      pointer-events: none;
     }
 
     .desc {
@@ -364,9 +373,13 @@
         transition: none;
       }
 
-      .ascii-title {
-        font-size: 7px;
+      .ascii-title-wrap {
         min-height: 90px;
+      }
+
+      .ascii-title {
+        font-size: 6px;
+        line-height: 0.9em;
       }
 
       .desc {
@@ -405,7 +418,9 @@
 
   <div class="content">
     <div id="float-box" class="text-box">
-      <pre id="ascii-title" class="ascii-title"></pre>
+      <div class="ascii-title-wrap">
+        <pre id="ascii-title" class="ascii-title"></pre>
+      </div>
 
       <p class="desc">
         жить осознавая что смерть
@@ -426,7 +441,7 @@
   <script>
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-    // Только Ctrl+S
+    // Запрет только на Ctrl+S
     document.addEventListener('keydown', function (e) {
       const key = e.key ? e.key.toLowerCase() : '';
       if (e.ctrlKey && key === 's') {
@@ -462,7 +477,7 @@
       });
     }
 
-    // Quotes
+    // Цитаты
     const quotes = [
       'random people in a big city',
       'не бойся',
@@ -501,7 +516,7 @@
       titleIndex = (titleIndex + 1) % tabTitles.length;
     }, 1200);
 
-    // Particles
+    // Частицы
     particlesJS('particles-js', {
       particles: {
         number: {
@@ -555,7 +570,7 @@
       retina_detect: true
     });
 
-    // Плавающий блок
+    // Плавающий текстовый блок
     const box = document.getElementById('float-box');
 
     if (!isTouch) {
@@ -566,90 +581,78 @@
       });
     }
 
-    // ASCII Z.R
+    // ASCII Z.R через canvas -> ascii
     const asciiTitle = document.getElementById('ascii-title');
-    const asciiChars = ' .:-=+*#%@';
+    const asciiChars = ' .,:;i1tfLCG08@';
+    const asciiCanvas = document.createElement('canvas');
+    const asciiCtx = asciiCanvas.getContext('2d');
     let asciiTime = 0;
 
-    function renderAsciiTitle() {
-      const width = window.innerWidth < 768 ? 22 : 32;
-      const height = window.innerWidth < 768 ? 8 : 10;
+    function drawAsciiText() {
+      const isMobile = window.innerWidth < 768;
+
+      const renderWidth = isMobile ? 120 : 180;
+      const renderHeight = isMobile ? 42 : 56;
+
+      asciiCanvas.width = renderWidth;
+      asciiCanvas.height = renderHeight;
+
+      asciiCtx.clearRect(0, 0, renderWidth, renderHeight);
+      asciiCtx.fillStyle = 'black';
+      asciiCtx.fillRect(0, 0, renderWidth, renderHeight);
+
+      const driftX = Math.sin(asciiTime * 1.15) * 1.0;
+      const driftY = Math.cos(asciiTime * 0.85) * 0.7;
+
+      asciiCtx.save();
+      asciiCtx.translate(renderWidth / 2 + driftX, renderHeight / 2 + driftY);
+      asciiCtx.textAlign = 'center';
+      asciiCtx.textBaseline = 'middle';
+      asciiCtx.font = `bold ${isMobile ? 26 : 34}px monospace`;
+
+      asciiCtx.fillStyle = '#ffffff';
+      asciiCtx.globalAlpha = 1;
+      asciiCtx.fillText('Z.R', 0, 0);
+
+      // фантомное эхо
+      asciiCtx.globalAlpha = 0.16;
+      asciiCtx.fillStyle = '#cfd8ff';
+      asciiCtx.fillText('Z.R', -2, 0);
+
+      asciiCtx.globalAlpha = 0.10;
+      asciiCtx.fillStyle = '#ffdede';
+      asciiCtx.fillText('Z.R', 2, 0);
+
+      asciiCtx.restore();
+
+      const img = asciiCtx.getImageData(0, 0, renderWidth, renderHeight).data;
+
+      const stepX = 4;
+      const stepY = 4;
+
       let output = '';
 
-      for (let y = 0; y < height; y++) {
+      for (let y = 0; y < renderHeight; y += stepY) {
         let row = '';
-        for (let x = 0; x < width; x++) {
-          const nx = (x - width / 2) / (width / 2);
-          const ny = (y - height / 2) / (height / 2);
+        for (let x = 0; x < renderWidth; x += stepX) {
+          const i = (y * renderWidth + x) * 4;
+          const r = img[i];
+          const g = img[i + 1];
+          const b = img[i + 2];
 
-          const wave = Math.sin(asciiTime * 1.5 + x * 0.45 + y * 0.3) * 0.08;
-
-          const zLeft = (
-            Math.abs(nx + 0.45) < 0.22 &&
-            Math.abs(ny) < 0.42 &&
-            Math.abs(ny - (nx + 0.45) * 1.5 + wave) < 0.16
-          ) || (
-            Math.abs(nx + 0.45) < 0.22 &&
-            Math.abs(ny) < 0.42 &&
-            Math.abs(ny + (nx + 0.45) * 1.5 - wave) < 0.16
-          );
-
-          const dot = (
-            Math.pow(nx - 0.02, 2) + Math.pow(ny + 0.02, 2) < 0.018
-          );
-
-          const rStem = (
-            Math.abs(nx - 0.30) < 0.08 &&
-            ny > -0.45 &&
-            ny < 0.42
-          );
-
-          const rTop = (
-            Math.pow((nx - 0.43) / 0.17, 2) + Math.pow((ny + 0.18) / 0.18, 2) < 1.0 &&
-            ny < 0.02
-          );
-
-          const rLeg = (
-            nx > 0.32 && nx < 0.58 &&
-            Math.abs(ny - (nx - 0.38) * 1.7 + wave * 0.7) < 0.12 &&
-            ny > -0.02
-          );
-
-          let value = 0;
-
-          if (zLeft) value = 0.75;
-          if (dot) value = 1.0;
-          if (rStem || rTop || rLeg) value = 0.85;
-
-          // лёгкое фантомное эхо
-          const phantom = Math.sin(asciiTime * 2.1) * 0.03;
-          if (
-            (
-              Math.abs(nx + 0.42 + phantom) < 0.22 &&
-              Math.abs(ny - phantom) < 0.42 &&
-              Math.abs(ny - (nx + 0.42 + phantom) * 1.5) < 0.18
-            ) ||
-            (
-              Math.abs(nx - 0.28 + phantom) < 0.08 &&
-              ny > -0.45 &&
-              ny < 0.42
-            )
-          ) {
-            value = Math.max(value, 0.25);
-          }
-
-          const idx = Math.max(0, Math.min(asciiChars.length - 1, Math.floor(value * (asciiChars.length - 1))));
-          row += asciiChars[idx];
+          const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+          const index = Math.floor(brightness * (asciiChars.length - 1));
+          row += asciiChars[index];
         }
         output += row + '\n';
       }
 
       asciiTitle.textContent = output;
-      asciiTime += 0.035;
-      requestAnimationFrame(renderAsciiTitle);
+      asciiTime += 0.03;
+      requestAnimationFrame(drawAsciiText);
     }
 
-    renderAsciiTitle();
+    drawAsciiText();
   </script>
 </body>
 </html>
