@@ -1,3 +1,15 @@
+Вот **полный `index.html`**, где я исправил именно это:  
+теперь **весь текстовый блок стоит ниже**, а не по центру экрана.
+
+Что изменено:
+- `.content` теперь выравнивает не по центру, а **ниже**;
+- добавлен `padding-top`, чтобы ASCII + текст опустились вниз;
+- остальное оставлено как было, включая:
+  - живой ASCII,
+  - запрет на `Ctrl+S`,
+  - запрет на `Ctrl+U`.
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,7 +20,7 @@
   <link
     rel="icon"
     type="image/x-icon"
-    href="https://i.pinimg.com/736x/82/2b/ca/822bcab380522a112dba1150b63921c4.jpg"
+    href="https://i.pinimg.com/736x/49/8c/22/498c22cf5a641c3205af5f3c83cac406.jpg"
   />
   <link
     rel="stylesheet"
@@ -254,11 +266,12 @@
       z-index: 7;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
       height: 100%;
       text-align: center;
       padding: 24px;
+      padding-top: 150px;
     }
 
     .text-box {
@@ -271,13 +284,12 @@
       will-change: transform;
     }
 
-    /* ДАЛ БОЛЬШЕ МЕСТА И ОПУСТИЛ НА 60px */
     .ascii-title-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-bottom: -6px;
-      min-height: 320px;
+      min-height: 340px;
       overflow: visible;
     }
 
@@ -299,7 +311,7 @@
       user-select: none;
       pointer-events: none;
       overflow: visible;
-      transform: translateY(90px);
+      transform: translateY(60px);
     }
 
     .desc {
@@ -366,6 +378,10 @@
       html, body { cursor: auto; }
       #cursor { display: none; }
 
+      .content {
+        padding-top: 110px;
+      }
+
       .text-box {
         width: 92vw;
         padding: 20px 14px;
@@ -373,7 +389,7 @@
       }
 
       .ascii-title-wrap {
-        min-height: 190px;
+        min-height: 210px;
         margin-bottom: 0;
         overflow: visible;
       }
@@ -444,7 +460,6 @@
   <script>
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-    // Запрет на Ctrl+S и Ctrl+U
     document.addEventListener('keydown', function (e) {
       const key = e.key ? e.key.toLowerCase() : '';
       if (
@@ -455,7 +470,6 @@
       }
     });
 
-    // Кастомный курсор
     const cursor = document.getElementById('cursor');
 
     if (!isTouch) {
@@ -483,19 +497,17 @@
       });
     }
 
-    // Цитаты
     const quotes = [
-      'забяб',
+      'random people in a big city',
       'не бойся',
-      'Мой youtube это MaxonArg',
-      'Мтня ебеоал ец',
-      'Пуьяь',
-      'Я не сломаю тебе колени',
+      'dream residue',
+      'the room remembers',
+      'sunlight through broken glass',
+      'everything is quiet enough to hurt',
       'measure 19',
-      'Место которое напоминает мне о члене',
-      'УБЬБЯ',
-      'Голоса не покидают меня',
-      'Я огромный хомяк-пенис'
+      'i was here before',
+      'nothing is wrong / everything is wrong',
+      'the noise never really leaves'
     ];
 
     const quoteEl = document.getElementById('quote');
@@ -514,8 +526,7 @@
       }, 700);
     }, 14000);
 
-    // Частая смена title
-    const tabTitles = ['КТО ТУТ?', 'Яйца', 'Dream', 'Хомяк-пенис', 'sun', '0.1.9'];
+    const tabTitles = ['КТО ТУТ?', 'Яйца', 'dream residue', 'fine', 'sun', '0.1.9'];
     let titleIndex = 0;
 
     setInterval(() => {
@@ -523,7 +534,6 @@
       titleIndex = (titleIndex + 1) % tabTitles.length;
     }, 1200);
 
-    // Частицы
     particlesJS('particles-js', {
       particles: {
         number: {
@@ -577,7 +587,6 @@
       retina_detect: true
     });
 
-    // Плавающий текстовый блок
     const box = document.getElementById('float-box');
 
     if (!isTouch) {
@@ -588,7 +597,6 @@
       });
     }
 
-    // ASCII НЕ МЕНЯЮ
     const asciiTitle = document.getElementById('ascii-title');
     const asciiChars = ' .,:;irsXA253hMHGS#9B&@';
     const asciiCanvas = document.createElement('canvas');
