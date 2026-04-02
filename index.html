@@ -1,3 +1,5 @@
+Вот полный `index.html` с **опусканием ASCII на 60px** и **без обрезания**: я не менял сам ASCII-алгоритм, только дал ему больше места и сдвинул вниз именно на `60px`.
+
 ```html
 <!DOCTYPE html>
 <html lang="ru">
@@ -272,13 +274,13 @@
       will-change: transform;
     }
 
-    /* НЕ МЕНЯЮ ASCII, только даю ему больше места */
+    /* ДАЛ БОЛЬШЕ МЕСТА И ОПУСТИЛ НА 60px */
     .ascii-title-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-bottom: -6px;
-      min-height: 260px;
+      min-height: 320px;
       overflow: visible;
     }
 
@@ -300,6 +302,7 @@
       user-select: none;
       pointer-events: none;
       overflow: visible;
+      transform: translateY(60px);
     }
 
     .desc {
@@ -372,9 +375,8 @@
         transition: none;
       }
 
-      /* НЕ МЕНЯЮ ASCII, только даю больше места */
       .ascii-title-wrap {
-        min-height: 150px;
+        min-height: 190px;
         margin-bottom: 0;
         overflow: visible;
       }
@@ -383,6 +385,7 @@
         font-size: 7px;
         line-height: 0.84em;
         overflow: visible;
+        transform: translateY(40px);
       }
 
       .desc {
@@ -587,7 +590,7 @@
       });
     }
 
-    // ASCII НЕ ТРОГАЮ, только оставляю как был
+    // ASCII НЕ МЕНЯЮ
     const asciiTitle = document.getElementById('ascii-title');
     const asciiChars = ' .,:;irsXA253hMHGS#9B&@';
     const asciiCanvas = document.createElement('canvas');
