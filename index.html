@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -275,9 +274,10 @@
     .ascii-title-wrap {
       display: flex;
       justify-content: center;
-      align-items: flex-end;
-      margin-bottom: 14px;
-      min-height: 190px;
+      align-items: center;
+      margin-bottom: -6px;
+      min-height: 150px;
+      transform: translateY(42px);
     }
 
     .ascii-title {
@@ -370,8 +370,9 @@
       }
 
       .ascii-title-wrap {
-        min-height: 120px;
-        margin-bottom: 10px;
+        min-height: 100px;
+        margin-bottom: 0;
+        transform: translateY(28px);
       }
 
       .ascii-title {
@@ -615,7 +616,7 @@
       const fontSize = isMobile ? 58 : 92;
 
       asciiCtx.save();
-      asciiCtx.translate(renderWidth / 2 + driftX, renderHeight / 2 + driftY + 8);
+      asciiCtx.translate(renderWidth / 2 + driftX, renderHeight / 2 + driftY);
       asciiCtx.textAlign = 'center';
       asciiCtx.textBaseline = 'middle';
       asciiCtx.font = `bold ${fontSize}px monospace`;
@@ -670,4 +671,3 @@
   </script>
 </body>
 </html>
-```
