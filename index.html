@@ -1,15 +1,3 @@
-Вот **полный `index.html`**, где я исправил именно это:  
-теперь **весь текстовый блок стоит ниже**, а не по центру экрана.
-
-Что изменено:
-- `.content` теперь выравнивает не по центру, а **ниже**;
-- добавлен `padding-top`, чтобы ASCII + текст опустились вниз;
-- остальное оставлено как было, включая:
-  - живой ASCII,
-  - запрет на `Ctrl+S`,
-  - запрет на `Ctrl+U`.
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -20,7 +8,7 @@
   <link
     rel="icon"
     type="image/x-icon"
-    href="https://i.pinimg.com/736x/49/8c/22/498c22cf5a641c3205af5f3c83cac406.jpg"
+    href="https://i.pinimg.com/736x/82/2b/ca/822bcab380522a112dba1150b63921c4.jpg"
   />
   <link
     rel="stylesheet"
@@ -311,7 +299,7 @@
       user-select: none;
       pointer-events: none;
       overflow: visible;
-      transform: translateY(60px);
+      transform: translateY(80px);
     }
 
     .desc {
@@ -498,16 +486,16 @@
     }
 
     const quotes = [
-      'random people in a big city',
+      'Чоң дик жана тердеген топтор',
       'не бойся',
       'dream residue',
-      'the room remembers',
-      'sunlight through broken glass',
-      'everything is quiet enough to hurt',
+      'Рисовий пиріг',
+      'Я не розумію як можна не чіпати 5-річну дівчинку за талію',
+      'Міньйон листя',
       'measure 19',
-      'i was here before',
-      'nothing is wrong / everything is wrong',
-      'the noise never really leaves'
+      'Полиция меня ищет',
+      'ТРОГАТЬ 5-летнюю девочку это не опасно',
+      'Толстые яйца'
     ];
 
     const quoteEl = document.getElementById('quote');
@@ -526,7 +514,7 @@
       }, 700);
     }, 14000);
 
-    const tabTitles = ['КТО ТУТ?', 'Яйца', 'dream residue', 'fine', 'sun', '0.1.9'];
+    const tabTitles = ['КТО ТУТ?', 'Яйца', 'Хомяк-пенис', 'Хуяка', 'sun', '0.1.9'];
     let titleIndex = 0;
 
     setInterval(() => {
@@ -685,4 +673,3 @@
   </script>
 </body>
 </html>
-```
