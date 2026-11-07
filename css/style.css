@@ -7,7 +7,8 @@
 
 * { 
   box-sizing: border-box; 
-  font-family: monospace !important; 
+  font-family: 'MS Gothic', 'Courier New', monospace !important;
+  letter-spacing: -0.05em; /* Делает буквы чуть плотнее друг к другу, как на YAM */
 }
 
 html, body {
