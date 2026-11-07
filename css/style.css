@@ -35,6 +35,16 @@ html, body {
   -webkit-user-drag: none;
 }
 
+/* --- ЖЕСТКИЙ ПОРЯДОК СЛОЕВ --- */
+.l-back  { z-index: 1; }
+.panel   { z-index: 2; }
+.l-frame { z-index: 3; }
+.l-top   { z-index: 4; }
+.l-link1 { z-index: 5; }
+.l-steam { z-index: 6; }
+.l-smile { z-index: 7; }
+/* ----------------------------- */
+
 .smile {
   position: absolute;
   left: 1.2%;
@@ -62,6 +72,7 @@ html, body {
   height: var(--h);
   display: block;
   transition: background .25s ease;
+  z-index: 10;
 }
 
 .hit.poly {
@@ -88,6 +99,7 @@ html, body {
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s ease, transform .2s ease;
+  z-index: 11;
 }
 
 .hit:hover + .tip {
