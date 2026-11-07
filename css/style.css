@@ -104,3 +104,4 @@ html, body {
   pointer-events: none;
   transition: opacity .2s;
 }
+.hit:hover + .tip { opacity: 1; }
