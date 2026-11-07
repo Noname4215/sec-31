@@ -123,5 +123,5 @@ html, body {
 
 .hit:hover + .tip {
   opacity: 1;
-  transform: translate(-50%, -120%) rotate(-3deg);
+  transform: translate(-50%, -120%) rotate(-6deg);
 }
