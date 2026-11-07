@@ -115,7 +115,7 @@ html, body {
   color: rgb(197, 150, 79);              
   background: rgba(0, 0, 0, .65);        
   text-shadow: 0 0 8px rgba(197, 150, 79, .25);
-  transform: translate(-50%, -85%) rotate(-3deg);
+  transform: translate(-50%, -85%) rotate(-6deg);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s ease, transform .2s ease;
