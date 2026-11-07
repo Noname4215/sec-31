@@ -1,13 +1,5 @@
 :root {
-  --text: #f4f4f4;
-  --soft-text: rgba(255,255,255,.86);
-  --line: rgba(255,255,255,.55);
-
-  /* Размер сцены = пропорции твоей рамки. Рамка 744x430 → 1.73 */
-  --stage-ratio: 1.73;
-  --stage-max: 1400px;
-
-  /* Где на рамке дыра под контент (в % от сцены). Подгони под свою картинку */
+  /* Положение пустой панели на рамке, в % от рамки. Подгоняй через ?debug */
   --panel-x: 10%;
   --panel-y: 19%;
   --panel-w: 80%;
@@ -17,140 +9,58 @@
 * { box-sizing: border-box; }
 
 html, body {
-  margin: 0; padding: 0; width: 100%; height: 100%;
+  margin: 0; width: 100%; height: 100%;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 45%, #111217 0%, #07080b 34%, #020202 68%, #000 100%);
-  color: var(--text);
-  font-family: 'Bahnschrift', 'Inter', sans-serif;
+  background:
+    radial-gradient(circle at 50% 45%, #3a2216 0%, #22130c 40%, #120a06 72%, #080403 100%);
   user-select: none;
-  cursor: none;
-}
-body { position: relative; animation: screenFlicker 8s infinite; }
-
-@keyframes screenFlicker {
-  0%,100%,48%,52% { filter: brightness(1) contrast(1); }
-  49% { filter: brightness(.992) contrast(1.01); }
-  50% { filter: brightness(1.006) contrast(1.02); }
-  51% { filter: brightness(.996) contrast(1.01); }
 }
 
-/* ---------- Фон ---------- */
-.bg-blur-wrap, .ghost-layer, #particles-js { position: fixed; inset: 0; pointer-events: none; }
-.bg-blur-wrap { z-index: 0; }
-#particles-js { z-index: 1; }
-.ghost-layer { z-index: 2; }
-
-.bg-blur { position: absolute; border-radius: 50%; filter: blur(130px); opacity: .12; mix-blend-mode: screen; }
-.blur-1 { width: 360px; height: 360px; top: 6%; left: 8%; background: rgba(95,110,190,.14); animation: blurFloat1 18s ease-in-out infinite alternate; }
-.blur-2 { width: 420px; height: 420px; right: 8%; bottom: 8%; background: rgba(110,26,40,.14); animation: blurFloat2 23s ease-in-out infinite alternate; }
-.blur-3 { width: 260px; height: 260px; left: 42%; top: 68%; background: rgba(210,210,230,.05); animation: blurFloat3 20s ease-in-out infinite alternate; }
-@keyframes blurFloat1 { from { transform: translate3d(0,0,0) scale(1); opacity: .1; } to { transform: translate3d(55px,-28px,0) scale(1.05); opacity: .13; } }
-@keyframes blurFloat2 { from { transform: translate3d(0,0,0) scale(1); opacity: .1; } to { transform: translate3d(-65px,34px,0) scale(.96); opacity: .14; } }
-@keyframes blurFloat3 { from { transform: translate3d(0,0,0) scale(1); opacity: .04; } to { transform: translate3d(20px,-36px,0) scale(1.08); opacity: .07; } }
-
-.ghost { position: absolute; color: rgba(255,255,255,.03); text-transform: uppercase; letter-spacing: .22em; filter: blur(1.5px); white-space: nowrap; }
-.ghost-1 { top: 10%; left: 7%; font-size: clamp(2rem,4vw,4rem); animation: g1 16s ease-in-out infinite alternate; }
-.ghost-2 { right: 8%; bottom: 20%; font-size: clamp(1rem,2vw,1.7rem); animation: g2 20s ease-in-out infinite alternate; }
-.ghost-3 { left: 61%; top: 54%; font-size: clamp(1.1rem,2.4vw,2rem); animation: g3 18s ease-in-out infinite alternate; }
-@keyframes g1 { from { transform: translate3d(0,0,0); opacity: .02; } to { transform: translate3d(18px,-10px,0); opacity: .04; } }
-@keyframes g2 { from { transform: translate3d(0,0,0); opacity: .018; } to { transform: translate3d(-14px,11px,0); opacity: .034; } }
-@keyframes g3 { from { transform: translate3d(0,0,0); opacity: .02; } to { transform: translate3d(12px,-15px,0); opacity: .036; } }
-
-/* ---------- Сцена ---------- */
-.stage-wrap {
-  position: fixed; inset: 0; z-index: 6;
-  display: flex; align-items: center; justify-content: center;
-  padding: 2vmin;
-}
+/* Рамка по центру, масштаб считает main.js по размеру картинок */
 .stage {
-  position: relative;
-  /* вписывается и по ширине, и по высоте, не больше --stage-max */
-  width: min(100%, var(--stage-max), calc((100vh - 4vmin) * var(--stage-ratio)));
-  aspect-ratio: var(--stage-ratio);
-  container-type: inline-size;
+  position: fixed;
+  left: 50%; top: 50%;
+  width: 96vw; height: 56vw;          /* временно, до загрузки картинок */
+  transform: translate(-50%, -50%);
 }
 
-.layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.no-drag { -webkit-user-drag: none; user-select: none; }
+.layer {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
 
-/* Панель: контент лежит ПОД рамкой, поэтому края рамки перекрывают его */
 .panel {
   position: absolute;
   left: var(--panel-x); top: var(--panel-y);
   width: var(--panel-w); height: var(--panel-h);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center;
   overflow: hidden;
-  transition: transform .3s ease-out;
-  will-change: transform;
 }
 
-.ascii-title-wrap { display: flex; justify-content: center; align-items: center; }
-.ascii-title {
-  margin: 0;
-  font-family: 'Courier New', monospace;
-  font-size: 1.05cqw;           /* масштабируется вместе со сценой */
-  line-height: .82em;
-  white-space: pre; text-align: left;
-  color: #eef2ff;
-  text-shadow: 0 0 12px rgba(220,230,255,.08);
-  pointer-events: none;
-}
-.desc { margin: .6cqw 0 0; font-size: 1.25cqw; line-height: 1.7; color: var(--soft-text); }
-.handwritten { font-family: 'Shadows Into Light', cursive; font-size: 1.2em; transform: rotate(-3deg); display: inline-block; }
-#quote { margin-top: 1.4cqw; min-height: 1.2em; font-size: 1.05cqw; font-style: italic; opacity: .14; transition: opacity .8s ease; }
-
-/* ---------- Невидимые кнопки ---------- */
 .hit {
   position: absolute;
   left: var(--x); top: var(--y); width: var(--w); height: var(--h);
-  display: block;
-  border-radius: 6px;
+  display: block; border-radius: 6px;
   transition: background .25s ease, box-shadow .25s ease;
 }
-.hit:hover { background: rgba(255,255,255,.07); box-shadow: 0 0 18px rgba(255,255,255,.18); }
-.hit-label { display: none; }
+.hit:hover { background: rgba(255,200,150,.08); box-shadow: 0 0 18px rgba(255,160,90,.25); }
 
-/* Режим отладки: открой сайт с ?debug и увидишь контуры кнопок и панели */
-.debug .hit { outline: 1px dashed #0f0; background: rgba(0,255,0,.08); }
-.debug .hit-label { display: block; font-size: 1.1cqw; padding: 2px 4px; color: #0f0; }
+/* ?debug показывает контуры */
+.debug .hit   { outline: 1px dashed #0f0; background: rgba(0,255,0,.08); }
 .debug .panel { outline: 1px dashed #f0f; }
 
-/* Если рамка ещё не загружена: рисуем заглушку, чтобы сайт выглядел прилично */
-.no-frame .panel { border: 2px solid rgba(255,255,255,.18); background: rgba(255,255,255,.02); }
-.no-frame .hit { outline: 1px solid rgba(255,255,255,.25); }
-.no-frame .hit-label { display: block; font-size: 1.1cqw; padding: 3px 5px; color: rgba(255,255,255,.7); }
-.no-frame .frame { display: none; }
-
-/* ---------- Оверлеи ---------- */
+/* Ржавая зернистость и виньетка */
 .noise {
-  position: fixed; inset: -20%; pointer-events: none; z-index: 8; opacity: .07;
-  background-image: radial-gradient(rgba(255,255,255,.32) .6px, transparent .85px), radial-gradient(rgba(255,255,255,.11) .5px, transparent .75px);
+  position: fixed; inset: -20%; pointer-events: none; z-index: 8; opacity: .08;
+  background-image:
+    radial-gradient(rgba(255,210,170,.35) .6px, transparent .85px),
+    radial-gradient(rgba(255,210,170,.12) .5px, transparent .75px);
   background-size: 8px 8px, 11px 11px; background-position: 0 0, 4px 5px;
-  mix-blend-mode: soft-light; animation: noiseShift .22s steps(2) infinite;
-}
-@keyframes noiseShift { 0% { transform: translate(0,0); } 25% { transform: translate(-1%,1%); } 50% { transform: translate(1%,-1%); } 75% { transform: translate(.5%,1%); } 100% { transform: translate(0,0); } }
-.scanlines {
-  position: fixed; inset: 0; pointer-events: none; z-index: 9; opacity: .045;
-  background: repeating-linear-gradient(to bottom, rgba(255,255,255,.08) 0, rgba(255,255,255,.08) 1px, transparent 2px, transparent 4px);
   mix-blend-mode: soft-light;
 }
-.vignette { position: fixed; inset: 0; pointer-events: none; z-index: 10; background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,.10) 58%, rgba(0,0,0,.34) 100%); }
-
-#cursor {
-  position: fixed; width: 20px; height: 20px; left: 50%; top: 50%;
-  transform: translate(-50%,-50%);
-  border: 1px solid var(--line); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transition: width .25s ease, height .25s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease;
-  backdrop-filter: blur(1px);
-}
-#cursor.active { width: 42px; height: 42px; background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.82); box-shadow: 0 0 18px rgba(255,255,255,.14); }
-
-/* ---------- Телефоны ---------- */
-@media (max-width: 768px) {
-  html, body { cursor: auto; }
-  #cursor { display: none; }
-  .noise { opacity: .045; }
-  .scanlines { opacity: .03; }
+.vignette {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9;
+  background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.18) 62%, rgba(0,0,0,.5) 100%);
 }
