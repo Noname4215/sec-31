@@ -73,7 +73,7 @@ html, body {
   );
 }
 
-.hit:hover { background: rgba(255, 200, 150, .15); }
+
 
 .debug .hit   { background: rgba(0, 255, 0, .35); }
 .debug .panel { outline: 1px dashed #f0f; }
