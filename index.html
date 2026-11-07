@@ -4,64 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>КТО ТУТ?</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Shadows+Into+Light&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/style.css?v=1" />
+  <link rel="stylesheet" href="./css/style.css?v=3" />
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- ФОН: твои эффекты, лежат под рамкой -->
-  <div class="bg-blur-wrap">
-    <div class="bg-blur blur-1"></div>
-    <div class="bg-blur blur-2"></div>
-    <div class="bg-blur blur-3"></div>
-  </div>
-  <div class="ghost-layer">
-    <div class="ghost ghost-1">019</div>
-    <div class="ghost ghost-2">dream residue</div>
-    <div class="ghost ghost-3">fine</div>
-  </div>
-  <div id="particles-js"></div>
+  <!-- Рамка из трёх слоёв. Порядок важен: Back → (панель) → Frame → Top -->
+  <main class="stage" id="stage">
+    <img class="layer" id="back" src="./media/assets/Back_oPQd.webp" alt="" draggable="false" />
 
-  <!-- СЦЕНА: все слои внутри позиционируются в процентах от неё -->
-  <main class="stage-wrap">
-    <div class="stage" id="stage">
+    <!-- Пустая панель. Сюда потом можно класть контент -->
+    <section class="panel" id="panel"></section>
 
-      <!-- 1. Панель с контентом (под рамкой) -->
-      <section class="panel" id="floatBox">
-        <div class="ascii-title-wrap"><pre id="ascii-title" class="ascii-title"></pre></div>
-        <p class="desc">хомяк-пенис <span class="handwritten"></span></p>
-        <div id="quote"></div>
-      </section>
+    <img class="layer" src="./media/assets/Frame_oPQd.webp" alt="" draggable="false" />
+    <img class="layer" src="./media/assets/Top_oPQd.webp" alt="" draggable="false" />
 
-      <!-- 2. Рамка поверх панели (прозрачный PNG/WebP, внутри панели дыра или полупрозрачность) -->
-      <img class="layer frame no-drag" id="frameImg" src="./media/assets/frame.webp" alt="" /   <img class="layer no-drag" src="./media/assets/Back_oPQd.webp" alt="" />
-   <img class="layer frame no-drag" id="frameImg" src="./media/assets/Frame_oPQd.webp" alt="" />
-   <img class="layer no-drag" src="./media/assets/Top_oPQd.webp" alt="" />
-
-      <!-- 3. Невидимые кнопки поверх рамки. Позиции правятся в style.css (--x --y --w --h) -->
-      <a class="hit" style="--x:86.5%; --y:79%; --w:7%; --h:12%;"
-         href="https://steamcommunity.com/id/Zero019/" target="_blank" rel="noopener noreferrer"
-         title="Steam"><span class="hit-label">Steam</span></a>
-
-      <a class="hit" style="--x:1%; --y:2%; --w:12%; --h:20%;"
-         href="#" title="Смайлик"><span class="hit-label">:)</span></a>
-
-      <a class="hit" style="--x:23%; --y:1%; --w:15%; --h:11%;"
-         href="#" title="Z.R"><span class="hit-label">Z.R</span></a>
-
-      <a class="hit" style="--x:40%; --y:0%; --w:22%; --h:14%;"
-         href="#" title="Steam-пластина"><span class="hit-label">Steam</span></a>
-    </div>
+    <!-- Невидимые кнопки. Позиции: --x --y --w --h в % от рамки. Открой сайт с ?debug, чтобы их увидеть -->
+    <a class="hit" style="--x:86.5%; --y:79%; --w:7%; --h:12%;"
+       href="https://steamcommunity.com/id/Zero019/" target="_blank" rel="noopener noreferrer" title="Steam"></a>
   </main>
 
-  <!-- ОВЕРЛЕИ -->
   <div class="noise"></div>
-  <div class="scanlines"></div>
   <div class="vignette"></div>
-  <div id="cursor"></div>
 
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script src="./scripts/main.js?v=1"></script>
+  <script src="./scripts/main.js?v=3"></script>
 </body>
 </html>
