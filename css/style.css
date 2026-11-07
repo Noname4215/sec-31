@@ -8,7 +8,7 @@
 * { 
   box-sizing: border-box; 
   font-family: 'MS Gothic', 'Courier New', monospace !important;
-  letter-spacing: -0.05em; /* Делает буквы чуть плотнее друг к другу, как на YAM */
+  letter-spacing: -0.05em;
 }
 
 html, body {
@@ -17,7 +17,6 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: #000;
-  /* ржавый вариант: background: radial-gradient(circle at 50% 45%, #3a2216 0%, #22130c 40%, #120a06 72%, #080403 100%); */
   user-select: none;
 }
 
