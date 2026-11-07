@@ -2,18 +2,21 @@
   if (location.search.includes('debug')) document.body.classList.add('debug');
 
   const stage = document.getElementById('stage');
-  const back = document.getElementById('back');
+  const frame = document.getElementById('frame');
 
-  // Вписываем рамку в окно с сохранением пропорций (размер берём из самой картинки)
+  // Вписываем рамку в окно с запасом по краям
   function fit() {
-    const w = back.naturalWidth, h = back.naturalHeight;
+    const w = frame.naturalWidth, h = frame.naturalHeight;
     if (!w || !h) return;
-    const k = Math.min((innerWidth * 0.96) / w, (innerHeight * 0.96) / h);
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+    const k = Math.min((vw * 0.94) / w, (vh * 0.94) / h);
     stage.style.width = Math.round(w * k) + 'px';
     stage.style.height = Math.round(h * k) + 'px';
   }
 
-  back.addEventListener('load', fit);
+  frame.addEventListener('load', fit);
   window.addEventListener('resize', fit);
-  if (back.complete) fit();
+  window.addEventListener('load', fit);
+  if (frame.complete) fit();
 })();
