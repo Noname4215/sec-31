@@ -5,11 +5,7 @@
   --panel-h: 66%;
 }
 
-* { 
-  box-sizing: border-box; 
-  font-family: 'MS Gothic', 'Courier New', monospace !important;
-  letter-spacing: -0.05em;
-}
+* { box-sizing: border-box; }
 
 html, body {
   margin: 0;
@@ -76,10 +72,38 @@ html, body {
   );
 }
 
+.tip {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  margin: 0;
+  padding: .15em .9em .2em;
+  font: var(--fs, 1.4vw) 'Special Elite', 'Courier New', monospace;
+  white-space: nowrap;
+  text-align: center;
+  color: rgb(197, 150, 79);
+  background: rgba(0, 0, 0, .7);
+  text-shadow: 0 0 8px rgba(197, 150, 79, .25);
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
 
+.hit:hover + .tip {
+  opacity: 1;
+  transform: translate(-50%, calc(-50% - .4vw)) rotate(var(--rot, 0deg));
+}
 
-.debug .hit   { background: rgba(0, 255, 0, .35); }
-.debug .panel { outline: 1px dashed #f0f; }
+.edit .hit { background: rgba(0, 255, 0, .25); cursor: move; touch-action: none; }
+.edit .tip {
+  opacity: 1 !important;
+  pointer-events: auto;
+  cursor: move;
+  touch-action: none;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) !important;
+}
+.edit [data-sel] { outline: 2px solid #0ff; outline-offset: 1px; }
 
 .noise {
   position: fixed;
@@ -101,27 +125,4 @@ html, body {
   pointer-events: none;
   z-index: 9;
   background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, .35) 100%);
-}
-
-.tip {
-  position: absolute;
-  left: calc(var(--x) + var(--w) / 2);
-  top: var(--y);
-  margin: 0;
-  padding: .15em .9em .2em;
-  font: 1.5vw 'Special Elite', 'Courier New', monospace;
-  white-space: nowrap;
-  text-align: center;
-  color: rgb(197, 150, 79);              
-  background: rgba(0, 0, 0, .65);        
-  text-shadow: 0 0 8px rgba(197, 150, 79, .25);
-  transform: translate(-60%, -85%) rotate(-9deg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
-}
-
-.hit:hover + .tip {
-  opacity: 1;
-  transform: translate(-60%, -120%) rotate(-9deg);
 }
