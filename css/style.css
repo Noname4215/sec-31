@@ -105,18 +105,23 @@ html, body {
 
 .tip {
   position: absolute;
-  left: var(--x);
+  left: calc(var(--x) + var(--w) / 2);
   top: var(--y);
   margin: 0;
-  padding: .3em .7em;
-  font: 1.3vw 'Courier New', monospace;
+  padding: .15em .9em .2em;
+  font: 1.5vw 'Special Elite', 'Courier New', monospace;
   white-space: nowrap;
-  color: rgb(197, 150, 79);
-  background: rgba(0, 0, 0, .65);
-  transform: rotate(-4deg);
+  text-align: center;
+  color: rgb(197, 150, 79);              
+  background: rgba(0, 0, 0, .65);        
+  text-shadow: 0 0 8px rgba(197, 150, 79, .25);
+  transform: translate(-50%, -85%) rotate(-3deg);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .2s;
+  transition: opacity .2s ease, transform .2s ease;
 }
 
-.hit:hover + .tip { opacity: 1; }
+.hit:hover + .tip {
+  opacity: 1;
+  transform: translate(-50%, -120%) rotate(-3deg);
+}
