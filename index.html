@@ -22,14 +22,21 @@
     <img class="layer" src="./media/assets/Steam_oPQd.webp" alt="" draggable="false" />
 
     <!-- Невидимые кнопки. Позиции: --x --y --w --h в % от рамки. Открой сайт с ?debug, чтобы их увидеть -->
-    <a class="hit poly" style="--x:45.36%; --y:10.44%; --w:5.32%; --h:8.63%;"
-   href="https://steamcommunity.com/id/Zero019/" target="_blank" rel="noopener noreferrer" title="Steam"></
-       href="https://steamcommunity.com/id/Zero019/" target="_blank" rel="noopener noreferrer" title="Steam"></a>
+    <p id="title-home" class="home-title invisible">Homepage</p>
+    <a id="steam-link" class="hit poly" style="--x:45.36%; --y:10.44%; --w:5.32%; --h:8.63%;"
+   href="https://steamcommunity.com" target="_blank" rel="noopener noreferrer" title="Steam"></a>
   </main>
 
   <div class="noise"></div>
   <div class="vignette"></div>
 
   <script src="./scripts/main.js?v=3"></script>
+  <script>
+  const link = document.getElementById('steam-link');
+  const title = document.getElementById('title-home');
+
+  link.addEventListener('mouseenter', () => title.classList.remove('invisible'));
+  link.addEventListener('mouseleave', () => title.classList.add('invisible'));
+</script>
 </body>
 </html>
