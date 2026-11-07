@@ -88,3 +88,19 @@ html, body {
     radial-gradient(rgba(255, 210, 170, .35) .6px, transparent .85px),
     radial-gradient(rgba(255, 210, 170, .12) .5px, transparent .75px);
   background-size: 8px 8px, 11px 11px;
+
+.tip {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  margin: 0;
+  padding: .3em .7em;
+  font: 1.3vw 'Courier New', monospace;
+  white-space: nowrap;
+  color: rgb(197, 150, 79);          
+  background: rgba(0, 0, 0, .65);
+  transform: rotate(-4deg);          
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
