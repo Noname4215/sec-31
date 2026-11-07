@@ -2,7 +2,6 @@
   const stage = document.getElementById('stage');
   const frame = document.getElementById('frame');
 
-  // Вписываем рамку в окно с запасом по краям
   function fit() {
     const w = frame.naturalWidth, h = frame.naturalHeight;
     if (!w || !h) return;
@@ -17,7 +16,7 @@
   window.addEventListener('load', fit);
   if (frame.complete) fit();
 
-  const hoverSound = new Audio('./media/audio/steam.ogg');
+  const hoverSound = new Audio('./media/audio/hover.mp3');
   hoverSound.preload = 'auto';
   hoverSound.volume = 0.4;
   let unlocked = false;
@@ -32,7 +31,6 @@
     }
   });
 
-  // Редактор: открой сайт с ?edit
   if (location.search.includes('edit')) {
     const s = document.createElement('script');
     s.src = './scripts/editor.js?v=1';
