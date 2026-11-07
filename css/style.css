@@ -40,30 +40,32 @@ html, body {
 }
 
 .hit {
-  /* Форма снята с картинки (штучатая зона ~75×67px в области 640,81 – 714,147) */
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  display: block;
+  transition: background .25s ease;
+}
+
+/* Форма-полигон: добавь класс "poly" только тем кнопкам, которым она нужна */
+.hit.poly {
   clip-path: polygon(
     0% 47.8%, 52% 6%, 72% 0%, 78.7% 0%,
     84% 10.4%, 94.7% 46.3%, 98.7% 77.6%,
     48% 95.5%, 36% 98.5%, 5.3% 59.7%, 0% 50.7%
-  
-  /* Плавное изменение цвета при наведении */
-  transition: background .25s ease;
+  );
 }
 
-.hit:hover { 
-  /* Подсветка будет заливать только внутреннюю часть полигона */
-  background: rgba(255, 200, 150, 0.15); 
+.hit:hover {
+  background: rgba(255, 200, 150, .15);
 }
 
-/* ?debug показывает точный скошенный контур зеленого цвета */
-.debug .hit { 
-  background: rgba(0, 255, 0, 0.15); 
-  
-  /* Стандартный outline или border обрезаются свойством clip-path. 
-     Чтобы в debug-режиме видеть четкую линию по контуру полигона, используем filter: */
-  filter: drop-shadow(0 0 1px #0f0) drop-shadow(0 0 1px #0f0);
+/* ?debug: заливка видна по контуру. Обводка и drop-shadow обрезаются clip-path, поэтому только заливка */
+.debug .hit {
+  background: rgba(0, 255, 0, .35);
 }
-.debug .panel { outline: 1px dashed #f0f; }
 
 /* Ржавая зернистость и виньетка */
 .noise {
