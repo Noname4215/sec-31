@@ -42,13 +42,28 @@ html, body {
 .hit {
   position: absolute;
   left: var(--x); top: var(--y); width: var(--w); height: var(--h);
-  display: block; border-radius: 6px;
-  transition: background .25s ease, box-shadow .25s ease;
+  display: block;
+  
+  /* Применяем точную форму полигона вместо border-radius */
+  clip-path: polygon(36% 16%, 66% 5%, 83% 76%, 17% 81%);
+  
+  /* Плавное изменение цвета при наведении */
+  transition: background .25s ease;
 }
-.hit:hover { background: rgba(255,200,150,.08); box-shadow: 0 0 18px rgba(255,160,90,.25); }
 
-/* ?debug показывает контуры */
-.debug .hit   { outline: 1px dashed #0f0; background: rgba(0,255,0,.08); }
+.hit:hover { 
+  /* Подсветка будет заливать только внутреннюю часть полигона */
+  background: rgba(255, 200, 150, 0.15); 
+}
+
+/* ?debug показывает точный скошенный контур зеленого цвета */
+.debug .hit { 
+  background: rgba(0, 255, 0, 0.15); 
+  
+  /* Стандартный outline или border обрезаются свойством clip-path. 
+     Чтобы в debug-режиме видеть четкую линию по контуру полигона, используем filter: */
+  filter: drop-shadow(0 0 1px #0f0) drop-shadow(0 0 1px #0f0);
+}
 .debug .panel { outline: 1px dashed #f0f; }
 
 /* Ржавая зернистость и виньетка */
