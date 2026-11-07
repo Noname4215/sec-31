@@ -1,20 +1,95 @@
+:root {
+  --panel-x: 10%;
+  --panel-y: 19%;
+  --panel-w: 80%;
+  --panel-h: 66%;
+}
+
+* { box-sizing: border-box; }
+
 html, body {
-  margin: 0; 
-  padding: 0;
-  width: 100%; 
+  margin: 0;
+  width: 100%;
   height: 100%;
   overflow: hidden;
-  /* Форсируем черный цвет везде, где только можно */
-  background: #000000 !important; 
-  background-color: #000000 !important;
+  background: #000;
   user-select: none;
 }
 
-/* На всякий случай гасим дефолтный фон у stage, если картинка еще не загрузилась */
 .stage {
   position: fixed;
-  left: 50%; top: 50%;
-  width: 96vw; height: 56vw;
+  left: 50%;
+  top: 50%;
+  width: 96vw;
+  height: 56vw;
   transform: translate(-50%, -50%);
-  background: transparent; 
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.smile {
+  position: absolute;
+  left: 1.2%;
+  top: 1.2%;
+  width: 19%;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.panel {
+  position: absolute;
+  left: var(--panel-x);
+  top: var(--panel-y);
+  width: var(--panel-w);
+  height: var(--panel-h);
+  overflow: hidden;
+}
+
+.hit {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  display: block;
+  border-radius: 6px;
+  transition: background .25s ease, box-shadow .25s ease;
+}
+.hit:hover {
+  background: rgba(255, 200, 150, .08);
+  box-shadow: 0 0 18px rgba(255, 160, 90, .25);
+}
+
+.debug .hit   { outline: 1px dashed #0f0; background: rgba(0, 255, 0, .08); }
+.debug .panel { outline: 1px dashed #f0f; }
+
+.noise {
+  position: fixed;
+  inset: -20%;
+  pointer-events: none;
+  z-index: 8;
+  opacity: .04;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, .35) .6px, transparent .85px),
+    radial-gradient(rgba(255, 255, 255, .12) .5px, transparent .75px);
+  background-size: 8px 8px, 11px 11px;
+  background-position: 0 0, 4px 5px;
+  mix-blend-mode: soft-light;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+  background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, .35) 100%);
 }
