@@ -1,6 +1,7 @@
 (() => {
   const stage = document.getElementById('stage');
   const frame = document.getElementById('frame');
+  const isEdit = location.search.includes('edit');
 
   function fit() {
     const w = frame.naturalWidth, h = frame.naturalHeight;
@@ -16,22 +17,60 @@
   window.addEventListener('load', fit);
   if (frame.complete) fit();
 
-  const hoverSound = new Audio('./media/audio/steam.ogg');
-  hoverSound.preload = 'auto';
-  hoverSound.volume = 0.4;
+  // ---------- звуки ----------
+  const sounds = {};
+  function getSound(src, vol = 0.4) {
+    if (!sounds[src]) {
+      const a = new Audio(src);
+      a.preload = 'auto';
+      a.volume = vol;
+      sounds[src] = a;
+    }
+    return sounds[src];
+  }
+  function play(src, vol) {
+    const a = getSound(src, vol);
+    a.currentTime = 0;
+    a.play().catch(() => {});
+  }
+
+  // звук при наведении: только у кнопок с атрибутом data-hover="путь/к/звуку"
   let unlocked = false;
   const unlock = () => { unlocked = true; };
   window.addEventListener('pointerdown', unlock, { once: true });
   window.addEventListener('keydown', unlock, { once: true });
   stage.addEventListener('mouseover', e => {
-    if (!unlocked || location.search.includes('edit')) return;
-    if (e.target.classList && e.target.classList.contains('hit')) {
-      hoverSound.currentTime = 0;
-      hoverSound.play().catch(() => {});
-    }
+    if (!unlocked || isEdit) return;
+    const hit = e.target.closest && e.target.closest('.hit[data-hover]');
+    if (hit) play(hit.dataset.hover, 0.4);
   });
 
-  if (location.search.includes('edit')) {
+  // ---------- экран: клик по кнопке включает / выключает ----------
+  const display = document.getElementById('display');
+  const displayBtn = document.getElementById('display-btn');
+  if (display && displayBtn) {
+    displayBtn.addEventListener('click', e => {
+      e.preventDefault();
+      if (isEdit) return;
+      display.classList.toggle('on');
+    });
+  }
+
+  // ---------- кот: по клику мяу, с малым шансом другой звук ----------
+  const RARE_CHANCE = 0.08; // 8%
+  const kittyBtn = document.getElementById('kitty-btn');
+  if (kittyBtn) {
+    kittyBtn.addEventListener('click', e => {
+      e.preventDefault();
+      if (isEdit) return;
+      const src = Math.random() < RARE_CHANCE
+        ? './media/audio/gofuckyourself.ogg'
+        : './media/audio/meow.ogg';
+      play(src, 0.7);
+    });
+  }
+
+  if (isEdit) {
     const s = document.createElement('script');
     s.src = './scripts/editor.js?v=4';
     document.body.appendChild(s);
