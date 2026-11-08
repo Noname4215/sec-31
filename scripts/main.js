@@ -1,4 +1,6 @@
 (() => {
+  if (window.__mainInit) throw new Error('main.js загружен дважды');
+window.__mainInit = true;
   const stage = document.getElementById('stage');
   const frame = document.getElementById('frame');
   const isEdit = location.search.includes('edit');
