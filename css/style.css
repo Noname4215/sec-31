@@ -35,25 +35,14 @@ html, body {
   -webkit-user-drag: none;
 }
 
-/* --- ЖЕСТКИЙ ПОРЯДОК СЛОЕВ --- */
-.l-back  { z-index: 1; }
-.panel   { z-index: 2; }
-.l-frame { z-index: 3; }
-.l-top   { z-index: 4; }
-.l-link1 { z-index: 5; }
-.l-steam { z-index: 6; }
-.l-smile { z-index: 7; }
-/* ----------------------------- */
-
-.smile {
-  position: absolute;
-  left: 1.2%;
-  top: 1.2%;
-  width: 19%;
-  height: auto;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
+.l-back     { z-index: 1; }
+.panel      { z-index: 2; }
+.l-frame    { z-index: 3; }
+.l-fangrate { z-index: 35; }
+.l-top      { z-index: 4; }
+.l-link1    { z-index: 5; }
+.l-steam    { z-index: 6; }
+.l-smile    { z-index: 7; }
 
 .panel {
   position: absolute;
@@ -62,6 +51,19 @@ html, body {
   width: var(--panel-w);
   height: var(--panel-h);
   overflow: hidden;
+}
+
+#kitty-gif {
+  position: absolute;
+  left: var(--x, 70%);
+  top: var(--y, 10%);
+  width: var(--w, 15%);
+  height: var(--h, auto);
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 20;
+  display: block;
+  -webkit-user-drag: none;
 }
 
 .hit {
@@ -107,7 +109,12 @@ html, body {
   transform: translate(-50%, calc(-50% - .4vw)) rotate(var(--rot, 0deg));
 }
 
-.edit .hit { background: rgba(0, 255, 0, .25); cursor: move; touch-action: none; }
+.edit .hit { 
+  background: rgba(0, 255, 0, .25); 
+  cursor: move; 
+  touch-action: none; 
+}
+
 .edit .tip {
   opacity: 1 !important;
   pointer-events: auto;
@@ -115,7 +122,21 @@ html, body {
   touch-action: none;
   transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) !important;
 }
-.edit [data-sel] { outline: 2px solid #0ff; outline-offset: 1px; }
+
+.edit #kitty-gif {
+  outline: 2px dashed rgba(255, 165, 0, 0.8) !important;
+  cursor: move !important;
+  touch-action: none !important;
+  pointer-events: auto !important;
+}
+
+#ed.img-sel .for-img { display: flex !important; }
+#ed.img-sel .for-hit:not(.for-img) { display: none !important; }
+
+.edit [data-sel] { 
+  outline: 2px solid #0ff !important; 
+  outline-offset: 1px !important; 
+}
 
 .noise {
   position: fixed;
