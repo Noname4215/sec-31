@@ -16,7 +16,7 @@
   window.addEventListener('load', fit);
   if (frame.complete) fit();
 
-  const hoverSound = new Audio('./media/audio/hover.mp3');
+  const hoverSound = new Audio('./media/audio/steam.ogg');
   hoverSound.preload = 'auto';
   hoverSound.volume = 0.4;
   let unlocked = false;
