@@ -16,7 +16,7 @@
   window.addEventListener('load', fit);
   if (frame.complete) fit();
 
-  const hoverSound = new Audio('./media/audio/steam.ogg');
+  const hoverSound = new Audio('./media/audio/hover.mp3');
   hoverSound.preload = 'auto';
   hoverSound.volume = 0.4;
   let unlocked = false;
@@ -33,7 +33,7 @@
 
   if (location.search.includes('edit')) {
     const s = document.createElement('script');
-    s.src = './scripts/editor.js?v=1';
+    s.src = './scripts/editor.js?v=4';
     document.body.appendChild(s);
   }
 })();
