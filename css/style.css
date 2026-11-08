@@ -35,14 +35,18 @@ html, body {
   -webkit-user-drag: none;
 }
 
-.l-back     { z-index: 1; }
-.panel      { z-index: 2; }
-.l-frame    { z-index: 3; }
-.l-fangrate { z-index: 35; }
-.l-top      { z-index: 4; }
-.l-link1    { z-index: 5; }
-.l-steam    { z-index: 6; }
-.l-smile    { z-index: 7; }
+/* Слои снизу вверх. Шаг 10, чтобы можно было вставлять новое между ними. */
+.l-back     { z-index: 10; }
+.panel      { z-index: 20; }
+.l-frame    { z-index: 30; }
+.l-display  { z-index: 35; }
+.l-top      { z-index: 40; }
+.l-link1    { z-index: 50; }
+.l-steam    { z-index: 60; }
+.l-smile    { z-index: 70; }
+#kitty-gif  { z-index: 80; }
+.l-fangrate { z-index: 90; }
+/* кнопки .hit = 100, подписи .tip = 110 (ниже, в своих блоках) */
 
 .panel {
   position: absolute;
@@ -61,9 +65,25 @@ html, body {
   height: var(--h, auto);
   object-fit: contain;
   pointer-events: none;
-  z-index: 20;
   display: block;
   -webkit-user-drag: none;
+}
+
+/* Экран: сначала невидим, по клику на #display-btn получает класс .on и загорается */
+.l-display {
+  opacity: 0;
+  transition: opacity .15s;
+}
+.l-display.on {
+  animation: screen-on .6s steps(1) forwards;
+}
+@keyframes screen-on {
+  0%   { opacity: 0; }
+  10%  { opacity: .8; }
+  20%  { opacity: .1; }
+  35%  { opacity: .9; }
+  45%  { opacity: .3; }
+  60%, 100% { opacity: 1; }
 }
 
 .hit {
@@ -74,7 +94,7 @@ html, body {
   height: var(--h);
   display: block;
   transition: background .25s ease;
-  z-index: 10;
+  z-index: 100;
 }
 
 .hit.poly {
@@ -101,7 +121,7 @@ html, body {
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s ease, transform .2s ease;
-  z-index: 11;
+  z-index: 110;
 }
 
 .hit:hover + .tip {
@@ -109,10 +129,10 @@ html, body {
   transform: translate(-50%, calc(-50% - .4vw)) rotate(var(--rot, 0deg));
 }
 
-.edit .hit { 
-  background: rgba(0, 255, 0, .25); 
-  cursor: move; 
-  touch-action: none; 
+.edit .hit {
+  background: rgba(0, 255, 0, .25);
+  cursor: move;
+  touch-action: none;
 }
 
 .edit .tip {
@@ -130,12 +150,15 @@ html, body {
   pointer-events: auto !important;
 }
 
+/* в режиме ?edit экран виден полупрозрачным, чтобы подгонять кнопку */
+.edit .l-display { opacity: .4; }
+
 #ed.img-sel .for-img { display: flex !important; }
 #ed.img-sel .for-hit:not(.for-img) { display: none !important; }
 
-.edit [data-sel] { 
-  outline: 2px solid #0ff !important; 
-  outline-offset: 1px !important; 
+.edit [data-sel] {
+  outline: 2px solid #0ff !important;
+  outline-offset: 1px !important;
 }
 
 .noise {
