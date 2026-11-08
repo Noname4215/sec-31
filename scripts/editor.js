@@ -7,15 +7,20 @@
     return isNaN(v) ? d : v;
   };
   const r2 = v => Math.round(v * 100) / 100;
-  const setV = (el, k, v, unit) => el.style.setProperty(k, r2(v) + unit);
+  const setV = (el, k, v, unit = '') => {
+    if (typeof v === 'string') {
+      el.style.setProperty(k, v);
+      return;
+    }
+    if (!Number.isFinite(v)) return;
+    el.style.setProperty(k, r2(v) + unit);
+  };
 
-  // Ссылки в редакторе не должны открываться
   stage.addEventListener('click', e => { if (e.target.closest('.hit')) e.preventDefault(); }, true);
 
-  // ---------- Панель ----------
   const css = document.createElement('style');
   css.textContent = `
-  #ed{position:fixed;top:10px;right:10px;width:250px;z-index:99999;background:#111;color:#ddd;
+  #ed{position:fixed;top:10px;right:10px;width:270px;max-height:calc(100vh - 20px);overflow-y:auto;z-index:99999;background:#111;color:#ddd;
     font:12px/1.4 Consolas,monospace;border:1px solid #444;padding:10px;user-select:none;cursor:default}
   #ed h4{margin:0 0 6px;font-size:12px;color:#0ff}
   #ed label{display:flex;align-items:center;gap:6px;margin:3px 0}
@@ -26,8 +31,8 @@
   #ed button:hover{background:#333}
   #ed small{display:block;color:#777;margin-top:6px}
   #ed .row{display:none}
-  #ed.hit-sel .for-hit,#ed.tip-sel .for-tip{display:flex}
-  #ed.tip-sel .for-hit{display:none}
+  #ed.hit-sel .for-hit,#ed.tip-sel .for-tip,#ed.img-sel .for-img{display:flex}
+  #ed.img-sel .for-hit:not(.for-img){display:none !important}
   #edOut{position:fixed;left:10px;bottom:10px;right:290px;height:130px;z-index:99999;background:#000;color:#9f9;
     font:12px Consolas,monospace;border:1px solid #444;padding:6px;display:none;user-select:text}`;
   document.head.appendChild(css);
@@ -36,10 +41,10 @@
   ed.id = 'ed';
   ed.innerHTML = `
     <h4 id="edTitle">Ничего не выбрано</h4>
-    <label class="row for-hit for-tip"><span>X %</span><input type="number" step="0.1" data-k="--x"></label>
-    <label class="row for-hit for-tip"><span>Y %</span><input type="number" step="0.1" data-k="--y"></label>
-    <label class="row for-hit"><span>Ширина</span><input type="number" step="0.1" data-k="--w"></label>
-    <label class="row for-hit"><span>Высота</span><input type="number" step="0.1" data-k="--h"></label>
+    <label class="row for-hit for-tip for-img"><span>X %</span><input type="number" step="0.1" data-k="--x"></label>
+    <label class="row for-hit for-tip for-img"><span>Y %</span><input type="number" step="0.1" data-k="--y"></label>
+    <label class="row for-hit for-img"><span>Ширина</span><input type="number" step="0.1" data-k="--w"></label>
+    <label class="row for-hit for-img"><span>Высота</span><input type="number" step="0.1" data-k="--h"></label>
     <label class="row for-tip"><span>Угол</span><input type="range" min="-45" max="45" step="0.5" data-k="--rot"><input type="number" step="0.5" data-k="--rot" style="max-width:52px"></label>
     <label class="row for-tip"><span>Размер</span><input type="number" step="0.1" data-k="--fs"></label>
     <label class="row for-tip"><span>Текст</span><input type="text" id="edText"></label>
@@ -48,30 +53,40 @@
       <button id="edDel">Удалить</button>
       <button id="edCopy">Копировать код</button>
     </div>
-    <small>Тащи мышью. Стрелки: сдвиг 0.1% (с Shift 1%). Q / E: поворот подписи. Ссылки здесь не открываются.</small>`;
+    <small>Тащи мышью. Стрелки: сдвиг 0.1% (с Shift 1%). Q / E: поворот подписи.</small>`;
   document.body.appendChild(ed);
 
   const out = document.createElement('textarea');
   out.id = 'edOut'; out.readOnly = true;
   document.body.appendChild(out);
 
-  // ---------- Выбор и синхронизация ----------
   let sel = null;
   const inputs = [...ed.querySelectorAll('input[data-k]')];
 
   function sync() {
     if (!sel) return;
+    const isImg = sel.id === 'kitty-gif';
     const isTip = sel.classList.contains('tip');
+    
     ed.classList.toggle('tip-sel', isTip);
-    ed.classList.toggle('hit-sel', !isTip);
-    document.getElementById('edTitle').textContent = isTip ? 'Подпись' : 'Кнопка';
+    ed.classList.toggle('hit-sel', !isTip && !isImg);
+    ed.classList.toggle('img-sel', isImg);
+
+    document.getElementById('edTitle').textContent = isImg ? 'Картинка/Гифка' : (isTip ? 'Подпись' : 'Кнопка');
+    
     inputs.forEach(i => {
       const k = i.dataset.k;
-      const d = k === '--fs' ? 1.4 : 0;
-      i.value = r2(getN(sel, k, d));
+      let val = sel.style.getPropertyValue(k);
+      
+      if (val === 'auto' || !val) {
+          i.value = '';
+      } else {
+          i.value = r2(parseFloat(val));
+      }
     });
     if (isTip) document.getElementById('edText').value = sel.textContent;
   }
+  
   function select(el) {
     if (sel) sel.removeAttribute('data-sel');
     sel = el;
@@ -79,21 +94,32 @@
   }
 
   const unitOf = k => (k === '--rot' ? 'deg' : k === '--fs' ? 'vw' : '%');
+  
   inputs.forEach(i => i.addEventListener('input', () => {
     if (!sel) return;
-    const k = i.dataset.k, v = parseFloat(i.value);
+    const k = i.dataset.k;
+    
+    if (i.value === '') {
+        if (k === '--w' || k === '--h') setV(sel, k, 'auto', '');
+        return;
+    }
+    
+    const v = parseFloat(i.value);
     if (isNaN(v)) return;
-    setV(sel, k, v, unitOf(k));
-    sync();
+    
+    let unit = unitOf(k);
+    if (sel.id === 'kitty-gif' && (k === '--w' || k === '--h')) unit = '%';
+    
+    setV(sel, k, v, unit);
   }));
+  
   document.getElementById('edText').addEventListener('input', e => {
     if (sel && sel.classList.contains('tip')) sel.textContent = e.target.value;
   });
 
-  // ---------- Перетаскивание ----------
   let drag = null;
   stage.addEventListener('pointerdown', e => {
-    const el = e.target.closest('.hit, .tip');
+    const el = e.target.closest('.hit, .tip, #kitty-gif');
     if (!el) return;
     e.preventDefault();
     select(el);
@@ -101,6 +127,7 @@
     drag = { el, sx: e.clientX, sy: e.clientY, x0: getN(el, '--x'), y0: getN(el, '--y'), rect };
     el.setPointerCapture(e.pointerId);
   });
+  
   stage.addEventListener('pointermove', e => {
     if (!drag) return;
     const dx = (e.clientX - drag.sx) / drag.rect.width * 100;
@@ -109,11 +136,11 @@
     setV(drag.el, '--y', drag.y0 + dy, '%');
     sync();
   });
+  
   const endDrag = () => { drag = null; };
   stage.addEventListener('pointerup', endDrag);
   stage.addEventListener('pointercancel', endDrag);
 
-  // ---------- Клавиши ----------
   window.addEventListener('keydown', e => {
     if (!sel || e.target.tagName === 'INPUT') return;
     const step = e.shiftKey ? 1 : 0.1;
@@ -130,7 +157,6 @@
     if (used) { e.preventDefault(); sync(); }
   });
 
-  // ---------- Кнопки панели ----------
   document.getElementById('edAdd').onclick = () => {
     const a = document.createElement('a');
     a.className = 'hit';
@@ -143,10 +169,13 @@
     stage.append(a, p);
     select(a);
   };
+  
   document.getElementById('edDel').onclick = () => {
     if (!sel) return;
-    const next = sel.classList.contains('hit') ? sel.nextElementSibling : null;
-    if (next && next.classList.contains('tip')) next.remove();
+    if (sel.classList.contains('hit')) {
+      const next = sel.nextElementSibling;
+      if (next && next.classList.contains('tip')) next.remove();
+    }
     sel.remove(); select(null);
     document.getElementById('edTitle').textContent = 'Ничего не выбрано';
   };
@@ -154,15 +183,22 @@
   function serialize(el) {
     const c = el.cloneNode(false);
     c.removeAttribute('data-sel');
+    
     const st = ['--x', '--y', '--w', '--h', '--rot', '--fs']
       .filter(k => el.style.getPropertyValue(k))
       .map(k => `${k}:${el.style.getPropertyValue(k).trim()};`).join(' ');
+      
+    if (el.id === 'kitty-gif') {
+        return `<img id="kitty-gif" class="editable-img" src="${el.getAttribute('src')}" style="${st}" alt="" draggable="false" />`;
+    }
+      
     c.setAttribute('style', st);
     if (el.classList.contains('tip')) c.textContent = el.textContent;
     return c.outerHTML;
   }
+  
   document.getElementById('edCopy').onclick = () => {
-    const code = [...stage.querySelectorAll('.hit, .tip')].map(serialize).join('\n');
+    const code = [...stage.querySelectorAll('.hit, .tip, #kitty-gif')].map(serialize).join('\n');
     out.value = code; out.style.display = 'block'; out.select();
     (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject())
       .catch(() => document.execCommand('copy'));
