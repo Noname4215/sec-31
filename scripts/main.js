@@ -58,17 +58,22 @@ window.__mainInit = true;
     });
   }
 
-  // ---------- кот: по клику мяу, с малым шансом другой звук ----------
+    // ---------- кот: по клику мяу, с малым шансом другой звук ----------
   const RARE_CHANCE = 0.08; // 8%
   const kittyBtn = document.getElementById('kitty-btn');
+  let kittyAudio = null;
   if (kittyBtn) {
     kittyBtn.addEventListener('click', e => {
       e.preventDefault();
       if (isEdit) return;
+      // пока предыдущий звук играет, новый не запускаем
+      if (kittyAudio && !kittyAudio.paused && !kittyAudio.ended) return;
       const src = Math.random() < RARE_CHANCE
         ? './media/audio/gofuckyourself.ogg'
         : './media/audio/meow.ogg';
-      play(src, 0.7);
+      kittyAudio = getSound(src, 0.7);
+      kittyAudio.currentTime = 0;
+      kittyAudio.play().catch(() => { kittyAudio = null; });
     });
   }
 
